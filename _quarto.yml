@@ -1,0 +1,63 @@
+project:
+  type: website
+  preview:
+    port: 3434
+    browser: true
+    watch-inputs: true
+    timeout: 3600
+
+execute:
+  freeze: auto
+
+website:
+  title: "Seth Kasowitz"
+  description: "Developing a new data science and bioinformatics blog"
+  site-url: https://sethkasowitz.com
+  repo-url: https://github.com/skasowitz/blog_website
+  repo-actions:
+    - source
+    - issue
+  page-navigation: true
+  open-graph:
+    locale: en_EN
+  cookie-consent:
+    type: express
+    prefs-text: "Change cookies 🍪"
+  navbar:
+    pinned: true
+    left:
+      - text: About
+        icon: person-circle
+        href: index.qmd
+      - text: CV
+        icon: file-earmark-text-fill
+        href: cv_html.qmd
+    right:
+      - icon: github
+        href: https://github.com/skasowitz
+        aria-label: GitHub
+      - icon: linkedin
+        aria-label: LinkedIn
+        href: https://www.linkedin.com/in/seth-kasowitz
+      - text: "{{< iconify simple-icons bluesky >}}"
+        href: https://bsky.app/profile/skasowitz.bsky.social
+
+page-footer:
+  border: true
+  left: "&#169; 2025 Seth Kasowitz"
+  right: "Made with [Quarto](https://quarto.org)"
+
+format:
+  html:
+    theme: [flatly, assets/theme.scss]
+    toc: true
+    toc-depth: 4
+    pagetitle: "{{< meta title >}} | Seth Kasowitz"
+    page-layout: article
+    smooth-scroll: true
+    link-external-newwindow: true
+    code-link: true
+    highlight-style: a11y
+
+
+

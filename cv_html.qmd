@@ -1,0 +1,154 @@
+---
+title: "Curriculum Vitae"
+format: html
+---
+
+Accomplished computational biologist and data scientist with extensive experience in
+genomics, bioinformatics, and large-scale data analysis. Proven expertise in developing
+machine learning models for biological data, integrating multi-omic datasets, and translating
+complex genetic findings into actionable insights for therapeutic discovery. Strong
+background in human genetics, statistical genomics, and cross-functional collaboration in
+regulated environments. Demonstrated ability to lead end-to-end analytics projects, manage
+databases, and develop reproducible pipelines for genomics and proteomics analysis.
+
+## {{< fa  user-tie >}} Professional Experience
+
+::: {.d-inline-flex style="align-items:baseline"}
+::: p-2
+![](assets/images/addgene-logo.png){width="160px" fig-alt="Addgene logo"}
+:::
+
+::: h3
+Addgene
+:::
+:::
+
+[Data Scientist - Bioinformatics]{.h5} [July 2022 - Sep 2024]{.cv-date}
+
+Led bioinformatics and data science initiatives for organizational data team,
+developing machine learning models and analytics workflows for large-
+scale datasets. Collaborated with cross-functional leadership to
+translate complex requirements into data-driven solutions and strategic
+initiatives.
+
+[Senior Scientist II - Scientific Support]{.h5} [Mar 2019 - July 2022]{.cv-date}
+
+Provided expert scientific support to global research community, resolving over
+5,000 technical inquiries from academic and industry scientists. Identified
+workflow bottlenecks and delivered data-driven solutions to accelerate
+biomedical research progress. Led cross-functional initiatives to optimize
+organizational processes and enhance material sharing capabilities and developed
+high-throughput genomics screening protocols.
+
+## {{< fa gears >}} Skills
+
+-    Genomics & Bioinformatics: NGS analytics, genetics, comparative genomics
+
+-    Statistical & Machine Learning: Advanced statistical modeling, machine learning, biostatistics, experimental design, predictive modeling, feature engineering
+
+-    Programming & Tools: R, Python, SQL, MLFlow, Git, Quarto, Shiny, cloud computing (GCP/AWS), database management, pipeline development
+
+-    Data Management: Large-scale biological database stewardship, data integrity assessment, exploratory data analysis, reproducible workflows, data visualization
+
+-    Leadership & Collaboration: Cross-functional team leadership, technical communication, project management, stakeholder engagement, mentorship
+
+
+## {{< fa  microscope >}} Research Experience
+
+::: {.d-inline-flex style="align-items:baseline"}
+::: p-2
+![](assets/images/UPENN_Shield.png){width="160px" fig-alt="University of Pennsylvania logo"}
+:::
+
+::: h3
+University of Pennsylvania
+:::
+:::
+
+[Research Associate]{.h5} [2017 - 2019]{.cv-date}
+
+Researched role of RNA modification on nuclear pre-mRNA processing.
+Developed mouse strains and embryonic stem cell lines to investigate the
+functions of YTH protein family members, Ythdc1 and Ythdc2
+
+[Biomedical Postdoctoral Program]{.h5} [2012 - 2017]{.cv-date}
+
+Postdoctoral researcher in Dr. Jeremy Wang's laboratory conducting
+molecular genetics research in reproductive biology. Investigated chromatin-
+associated proteins in mammalian germ line development using genomics and
+proteomics approaches. Designed and engineered gene knockout mouse
+models and characterized stem cell gene Utf1 functions in development.
+
+::: {.d-inline-flex style="align-items:baseline"}
+::: p-2
+![](assets/images/uconn_oak_leaf.png){width="160px" fig-alt="University of Connecticut logo"}
+:::
+
+::: h3
+University of Connecticut
+:::
+:::
+
+[Genetics & Genomics Program]{.h5} [2006-2012]{.cv-date}
+
+Doctoral research conducted with Dr. Michael J. O’Neill
+Investigated the genomic imprinting mechanism of Xlr3b/4b/4c, an X-
+linked locus with parent-specific gene expression. Examined the evolution
+of the genomic structure and protein coding genes at the locus.
+
+## {{< fa graduation-cap >}} Education
+
+::: {.d-inline-flex style="align-items:baseline"}
+::: p-2
+![](assets/images/uconn_oak_leaf.png){width="160px" fig-alt="University of Connecticut logo"}
+:::
+
+::: h3
+University of Connecticut
+:::
+:::
+
+[Doctor of Philosophy]{.h5} [2012]{.cv-date}
+
+-    Genetics & Genomics, Department of Molecular and Cell Biology
+-    "Parent-specific Gene Expression on the Mammalian X Chromosome"
+
+::: {.d-inline-flex style="align-items:baseline"}
+::: p-2
+![](assets/images/Union.Wordmark.RGB-Garnet.png){width="160px" fig-alt="Union College logo"}
+:::
+
+::: h3
+Union College
+:::
+:::
+
+[Bachelor of Science]{.h5} [2004]{.cv-date}
+
+-    B.S. Biology
+-    Thesis: “Comparative Review of Treatment Modalities for Acoustic Neuroma”
+
+## {{< fa  book >}} Publications
+
+Pyhtila B, Kasowitz S, Leeson R, Barrangou R. The Expanding Dissemination and Distribution Patterns of Diverse CRISPR Plasmids by Addgene. CRISPR J. 2023 Dec;6(6):493-501. Epub 2023 Nov 22. 
+
+Liu R, Kasowitz SD, Homolka D, Leu NA, Shaked JT, Ruthel G, Jain D, Lin H, Keeney S, Luo M, Pillai RS, Wang PJ. YTHDC2 is essential for pachytene progression and prevents aberrant microtubule-driven telomere clustering in male meiosis. Cell Rep. 2021 Dec 14;37(11):110110.
+
+Kasowitz S.D., Ma J., Anderson S.J., Leu N.A., Xu Y., Gregory B.D., Schultz R.M., Wang P.J. (2018) Nuclear m6A reader YTHDC1 regulates alternative polyadenylation and splicing during mouse oocyte development. PLoS Genetics 14(5), e1007412.
+
+Kasowitz S.D. and Wang P.J. “Sex Chromosomes and Sex-Linked Genes in Spermatogenesis.” Encyclopedia of Reproduction, Volume 3. ELSEVIER, 2018
+
+Shi B., Xue J., Zhou J., Kasowitz S.D., Zhang Y., Liang G., Guan Y., Shi Q., Liu M., Sha J., Huang X., Wang P.J. (2018) MORC2B is essential for meiotic progression and fertility. PLoS Genetics 14, e1007175.
+Kasowitz S.D., Luo M., Ma J., Leu N.A., Wang P.J. (2017) Embryonic lethality and defective male germ cell development in mice lacking UTF1. Sci Reports 7, 17259.
+
+Jue N.K., Murphy M.B., Kasowitz S.D., Qureshi S.M., Obergfell C.J., Elsisi S., Foley R.J., O Neill R.J., O Neill M.J. (2013). Determination of dosage compensation of the mammalian X chromosome by RNA-seq is dependent on analytical approach. BMC Genomics 14, 150.
+
+## {{< fa  chalkboard-user >}} Professional Development
+
+-    Teaching Experience: University of Connecticut instructor of record for "Laboratory Techniques in Functional Genomics" and "Experiments in DNA Identification" (2007-2010)
+
+-    Mentorship: Biology mentor for computer science and engineering co-ops at Addgene (2022-2024); American Society of Andrology Undergraduate Research Internships mentor (2013, 2015)
+
+-    Professional Affiliations: Society for the Study of Reproduction, American Society of Andrology
+
+-    Journal Reviewer: Biology of Reproduction, PLoS Genetics, Journal of Cellular Physiology
