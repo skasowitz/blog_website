@@ -32,6 +32,9 @@ website:
       - text: CV
         icon: file-earmark-text-fill
         href: cv_html.qmd
+      - text: Blog
+        icon: pen-fill
+        href: posts.qmd
     right:
       - icon: github
         href: https://github.com/skasowitz

@@ -3,13 +3,9 @@ title: "Curriculum Vitae"
 format: html
 ---
 
-Accomplished computational biologist and data scientist with extensive experience in
-genomics, bioinformatics, and large-scale data analysis. Proven expertise in developing
-machine learning models for biological data, integrating multi-omic datasets, and translating
-complex genetic findings into actionable insights for therapeutic discovery. Strong
-background in human genetics, statistical genomics, and cross-functional collaboration in
-regulated environments. Demonstrated ability to lead end-to-end analytics projects, manage
-databases, and develop reproducible pipelines for genomics and proteomics analysis.
+I'm a data scientist and molecular biologist and with extensive experience in
+genomics, bioinformatics, scientific support and large-scale data analysis. I develop machine learning models, integrate datasets, and translate complex findings into actionable insights. Strong background in human genetics, statistical genomics, and cross-functional collaboration with a demonstrated ability to lead end-to-end analytics projects, manage
+databases, and develop reproducible analytics workflows.
 
 ## {{< fa  user-tie >}} Professional Experience
 
@@ -19,7 +15,7 @@ databases, and develop reproducible pipelines for genomics and proteomics analys
 :::
 
 ::: h3
-Addgene
+
 :::
 :::
 

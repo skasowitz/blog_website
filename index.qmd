@@ -1,15 +1,39 @@
 ---
-title: "blog_website"
-listing:
-  contents: posts
-  feed: true
-  sort: "date desc"
-  type: default
-  categories: true
-  sort-ui: false
-  filter-ui: false
-page-layout: full
-title-block-banner: true
+pagetitle: "Seth Kasowitz | About"
+title: "Seth Kasowitz, PhD"
+subtitle: "A data obsessed biologist wants to plot everything"
+
+
+about:
+  id: hero-heading
+  template: jolla
+  image: assets/images/seth.portrait.jpg
+  image-alt: "Obligatory photo of an indoor scientist in an outdoor setting."
+  image-width: 12em
+  links:
+    - icon: github
+      text: GitHub
+      href: https://github.com/skasowitz
+    - icon: linkedin
+      text: LinkedIn
+      href: https://www.linkedin.com/in/seth-kasowitz
+    - text: "{{< iconify simple-icons bluesky >}}"
+      href: https://bsky.app/profile/skasowitz.bsky.social
+toc: false
+anchor-sections: false
+execute:
+  freeze: true
 ---
+
+::: {#hero-heading}
+:::
+
+## Hi!
+
+Thanks for visiting my site and blog.
+
+I'm a scientist with a deep passion for data analysis and visualization. At Addgene, the non-profit life science resource and repository, I helped accelerate scientific research as a senior support scientist and bioinformatics data scientist. This followed long academic adventures in genetics, reproductive biology, and RNA biogenesis.
+
+This site is intended as a place to share and explore all things data. Be it clean-up and imputation, exploratory analytics, visualization, or machine learning, I hope to showcase interesting and fun demonstrations with `Quarto`.
 
 

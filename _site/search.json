@@ -1,0 +1,93 @@
+[
+  {
+    "objectID": "posts/welcome/index.html",
+    "href": "posts/welcome/index.html",
+    "title": "Welcome To My Blog",
+    "section": "",
+    "text": "This is the first post in a Quarto blog. Welcome!\n\nSince this post doesn’t specify an explicit image, the first image in the post will be used in the listing page of posts."
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Seth Kasowitz, PhD",
+    "section": "",
+    "text": "GitHub\n  \n  \n    \n     LinkedIn"
+  },
+  {
+    "objectID": "about.html",
+    "href": "about.html",
+    "title": "About",
+    "section": "",
+    "text": "About this blog"
+  },
+  {
+    "objectID": "cv_html.html",
+    "href": "cv_html.html",
+    "title": "Curriculum Vitae",
+    "section": "",
+    "text": "I’m a data scientist and molecular biologist and with extensive experience in genomics, bioinformatics, and large-scale data analysis. I develop machine learning models, integrate mdatasets, and translate complex findings into actionable insights. Strong background in human genetics, statistical genomics, and cross-functional collaboration with a demonstrated ability to lead end-to-end analytics projects, manage databases, and develop reproducible analytics workflows."
+  },
+  {
+    "objectID": "cv_html.html#professional-experience",
+    "href": "cv_html.html#professional-experience",
+    "title": "Curriculum Vitae",
+    "section": " Professional Experience",
+    "text": "Professional Experience\n\n\n\n\n\nAddgene\n\n\nData Scientist - Bioinformatics July 2022 - Sep 2024\nLed bioinformatics and data science initiatives for organizational data team, developing machine learning models and analytics workflows for large- scale datasets. Collaborated with cross-functional leadership to translate complex requirements into data-driven solutions and strategic initiatives.\nSenior Scientist II - Scientific Support Mar 2019 - July 2022\nProvided expert scientific support to global research community, resolving over 5,000 technical inquiries from academic and industry scientists. Identified workflow bottlenecks and delivered data-driven solutions to accelerate biomedical research progress. Led cross-functional initiatives to optimize organizational processes and enhance material sharing capabilities and developed high-throughput genomics screening protocols."
+  },
+  {
+    "objectID": "cv_html.html#skills",
+    "href": "cv_html.html#skills",
+    "title": "Curriculum Vitae",
+    "section": " Skills",
+    "text": "Skills\n\nGenomics & Bioinformatics: NGS analytics, genetics, comparative genomics\nStatistical & Machine Learning: Advanced statistical modeling, machine learning, biostatistics, experimental design, predictive modeling, feature engineering\nProgramming & Tools: R, Python, SQL, MLFlow, Git, Quarto, Shiny, cloud computing (GCP/AWS), database management, pipeline development\nData Management: Large-scale biological database stewardship, data integrity assessment, exploratory data analysis, reproducible workflows, data visualization\nLeadership & Collaboration: Cross-functional team leadership, technical communication, project management, stakeholder engagement, mentorship"
+  },
+  {
+    "objectID": "cv_html.html#research-experience",
+    "href": "cv_html.html#research-experience",
+    "title": "Curriculum Vitae",
+    "section": " Research Experience",
+    "text": "Research Experience\n\n\n\n\n\nUniversity of Pennsylvania\n\n\nResearch Associate 2017 - 2019\nResearched role of RNA modification on nuclear pre-mRNA processing. Developed mouse strains and embryonic stem cell lines to investigate the functions of YTH protein family members, Ythdc1 and Ythdc2\nBiomedical Postdoctoral Program 2012 - 2017\nPostdoctoral researcher in Dr. Jeremy Wang’s laboratory conducting molecular genetics research in reproductive biology. Investigated chromatin- associated proteins in mammalian germ line development using genomics and proteomics approaches. Designed and engineered gene knockout mouse models and characterized stem cell gene Utf1 functions in development.\n\n\n\n\n\nUniversity of Connecticut\n\n\nGenetics & Genomics Program 2006-2012\nDoctoral research conducted with Dr. Michael J. O’Neill Investigated the genomic imprinting mechanism of Xlr3b/4b/4c, an X- linked locus with parent-specific gene expression. Examined the evolution of the genomic structure and protein coding genes at the locus."
+  },
+  {
+    "objectID": "cv_html.html#education",
+    "href": "cv_html.html#education",
+    "title": "Curriculum Vitae",
+    "section": " Education",
+    "text": "Education\n\n\n\n\n\nUniversity of Connecticut\n\n\nDoctor of Philosophy 2012\n\nGenetics & Genomics, Department of Molecular and Cell Biology\n“Parent-specific Gene Expression on the Mammalian X Chromosome”\n\n\n\n\n\n\nUnion College\n\n\nBachelor of Science 2004\n\nB.S. Biology\nThesis: “Comparative Review of Treatment Modalities for Acoustic Neuroma”"
+  },
+  {
+    "objectID": "cv_html.html#publications",
+    "href": "cv_html.html#publications",
+    "title": "Curriculum Vitae",
+    "section": " Publications",
+    "text": "Publications\nPyhtila B, Kasowitz S, Leeson R, Barrangou R. The Expanding Dissemination and Distribution Patterns of Diverse CRISPR Plasmids by Addgene. CRISPR J. 2023 Dec;6(6):493-501. Epub 2023 Nov 22.\nLiu R, Kasowitz SD, Homolka D, Leu NA, Shaked JT, Ruthel G, Jain D, Lin H, Keeney S, Luo M, Pillai RS, Wang PJ. YTHDC2 is essential for pachytene progression and prevents aberrant microtubule-driven telomere clustering in male meiosis. Cell Rep. 2021 Dec 14;37(11):110110.\nKasowitz S.D., Ma J., Anderson S.J., Leu N.A., Xu Y., Gregory B.D., Schultz R.M., Wang P.J. (2018) Nuclear m6A reader YTHDC1 regulates alternative polyadenylation and splicing during mouse oocyte development. PLoS Genetics 14(5), e1007412.\nKasowitz S.D. and Wang P.J. “Sex Chromosomes and Sex-Linked Genes in Spermatogenesis.” Encyclopedia of Reproduction, Volume 3. ELSEVIER, 2018\nShi B., Xue J., Zhou J., Kasowitz S.D., Zhang Y., Liang G., Guan Y., Shi Q., Liu M., Sha J., Huang X., Wang P.J. (2018) MORC2B is essential for meiotic progression and fertility. PLoS Genetics 14, e1007175. Kasowitz S.D., Luo M., Ma J., Leu N.A., Wang P.J. (2017) Embryonic lethality and defective male germ cell development in mice lacking UTF1. Sci Reports 7, 17259.\nJue N.K., Murphy M.B., Kasowitz S.D., Qureshi S.M., Obergfell C.J., Elsisi S., Foley R.J., O Neill R.J., O Neill M.J. (2013). Determination of dosage compensation of the mammalian X chromosome by RNA-seq is dependent on analytical approach. BMC Genomics 14, 150."
+  },
+  {
+    "objectID": "cv_html.html#professional-development",
+    "href": "cv_html.html#professional-development",
+    "title": "Curriculum Vitae",
+    "section": " Professional Development",
+    "text": "Professional Development\n\nTeaching Experience: University of Connecticut instructor of record for “Laboratory Techniques in Functional Genomics” and “Experiments in DNA Identification” (2007-2010)\nMentorship: Biology mentor for computer science and engineering co-ops at Addgene (2022-2024); American Society of Andrology Undergraduate Research Internships mentor (2013, 2015)\nProfessional Affiliations: Society for the Study of Reproduction, American Society of Andrology\nJournal Reviewer: Biology of Reproduction, PLoS Genetics, Journal of Cellular Physiology"
+  },
+  {
+    "objectID": "posts/post-with-code/index.html",
+    "href": "posts/post-with-code/index.html",
+    "title": "Post With Code",
+    "section": "",
+    "text": "This is a post with executable code."
+  },
+  {
+    "objectID": "posts.html",
+    "href": "posts.html",
+    "title": "Data Tales",
+    "section": "",
+    "text": "Post With Code\n\n\n\nnews\n\ncode\n\nanalysis\n\n\n\n\n\n\n\n\n\nSep 23, 2025\n\n\n\n\n\n\n\n\n\n\n\n\nWelcome To My Blog\n\n\n\nnews\n\n\n\n\n\n\n\n\n\nSep 20, 2025\n\n\n\n\n\nNo matching items"
+  },
+  {
+    "objectID": "index.html#hi",
+    "href": "index.html#hi",
+    "title": "Seth Kasowitz, PhD",
+    "section": "Hi!",
+    "text": "Hi!\nThanks for visiting my site and blog.\nI’m a scientist with a deep passion for data analysis and visualization. At Addgene, the non-profit life science resource and repository, I helped accelerate scientific research as a senior support scientist and bioinformatics data scientist. This followed long academic adventures in genetics, reproductive biology, and RNA biogenesis.\nThis site is intended as a place to share and explore all things data. Be it clean-up and imputation, exploratory analytics, visualization, or machine learning, I hope to showcase interesting and fun demonstrations with Quarto."
+  }
+]
