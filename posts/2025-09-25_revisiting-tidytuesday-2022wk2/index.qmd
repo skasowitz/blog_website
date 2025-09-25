@@ -1,0 +1,206 @@
+---
+title: "Quick Plot: TidyTuesday 2022 Week 2"
+description: "Revisiting an old plot"
+date: "2025-09-25"
+image: featured.png
+image-alt: A grid of plots roughly laid out like the states of the United State of America. There is one plot per state, each displaying a collection of colored areas, with the height corresponding to the percent of a bee colony affected by a particular stressor as measured over time.
+categories:
+  - TidyTuesday
+  - Data visualization
+  - ggplot2
+toc: true
+number-sections: true
+citation: true
+format: html
+execute:
+  echo: true
+  warning: false
+---
+
+This is part of a short series of posts revisiting data visualization work on TidyTuesday data sets. The code and plot were initially created on January 11th, 2022. This bee colony collapse data originally comes from the USDA. See the [TidyTuesday repo](https://github.com/rfordatascience/tidytuesday/tree/main/data/2022/2022-01-11 "TidyTuesday Github Repo for 2022wk2") for more information.
+
+## Setup
+
+### Packages
+
+```{r setup}
+library(tidyverse)
+library(geofacet)
+library(ggokabeito)
+```
+
+### Data
+
+```{r load-data}
+colony <- readr::read_csv(
+  'https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2022/2022-01-11/colony.csv'
+)
+stressor <- readr::read_csv(
+  'https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2022/2022-01-11/stressor.csv'
+)
+```
+
+## Explore the data
+
+Peak at the data as provided...
+```{r colony-data}
+glimpse(colony)
+```
+
+...quick overview of the data types and completeness
+```{r colony-skim}
+skimr::skim(colony)
+```
+
+```{r missing-data-check}
+#| label: row-count-plot
+#| fig-alt: |
+#|    Stacked bar plot showing number of rows of data for each year by quarter.
+
+colony |>
+  count(year, months) |>
+  ggplot(aes(x = year, y = n, fill = months)) +
+  geom_col() +
+  scale_fill_okabe_ito() +
+  scale_x_continuous(breaks = scales::breaks_width(1)) +
+  labs(
+    title = 'Quarterly rows of data per year',
+    subtitle = 'Expect one per state',
+    y = '',
+    x = 'Year'
+  ) +
+  theme_bw() +
+  theme(legend.position = 'bottom', )
+```
+
+```{r bee-count-check}
+#| label: colony-size-plot
+#| fig-alt: |
+#|   The total number of bees counted in each year by quarter.
+colony |>
+  summarise(n = sum(colony_n), .by = c(year, months)) |>
+  ggplot(aes(x = year, y = months, size = n / 1000000)) +
+  geom_point(show.legend = FALSE) +
+  scale_x_continuous(breaks = scales::breaks_width(1)) +
+  theme_bw() +
+  labs(title = 'Total colony sizes (n)', x = 'Year', y = 'Quarter')
+```
+
+No bees in 2019Q2. That seems unlikely.
+
+```{r colony-2019Q2}
+colony |>
+  filter(year == 2019, months == 'April-June')
+```
+
+That's no good, we'll likely want to drop this quarter's data from both data sets. First, let us take a quick look at the `stressor` data.
+
+```{r stressor-data}
+glimpse(stressor)
+```
+
+And checking 2019Q2 in this data we find the same issue!
+
+```{r stressor-2019Q2}
+stressor |>
+  filter(year == 2019, months == 'April-June')
+```
+
+## Data Prep
+
+Create a date variable and filter out rows for 2019Q2
+
+```{r filter-data}
+col_data <- colony |>
+  mutate(
+    quarter = case_when(
+      months == "January-March" ~ "Q1",
+      months == "April-June" ~ "Q2",
+      months == "July-September" ~ "Q3",
+      months == "October-December" ~ "Q4"
+    )
+  ) |>
+  unite(yearquarter, c("year", "quarter")) |>
+  mutate(date = yq(yearquarter)) |>
+  filter(yearquarter != '2019_Q2')
+
+stress_data <- stressor |>
+  mutate(
+    quarter = case_when(
+      months == "January-March" ~ "Q1",
+      months == "April-June" ~ "Q2",
+      months == "July-September" ~ "Q3",
+      months == "October-December" ~ "Q4"
+    )
+  ) |>
+  unite(yearquarter, c("year", "quarter")) |>
+  mutate(date = yq(yearquarter)) |>
+  filter(yearquarter != '2019_Q2')
+```
+
+Replace missing `stress_pct` data with 0, break out `stressors` into individual columns, and correct a mispelled variable name.
+
+```{r clean-up-data}
+stress_data <- stress_data |>
+  replace_na(list(stress_pct = 0)) |>
+  pivot_wider(
+    names_from = stressor,
+    values_from = stress_pct,
+    values_fill = 0
+  ) |>
+  unite(id, c('state', 'yearquarter')) |>
+  rename(Diseases = Disesases)
+```
+
+Join data sets
+
+```{r join-tables}
+full_data <- col_data |>
+  unite(id, c("state", "yearquarter"), remove = FALSE) |>
+  left_join(
+    stress_data |>
+      select(-months, -date)
+  ) |>
+  pivot_longer(
+    c("Varroa mites":"Unknown"),
+    names_to = "stressor",
+    values_to = "stress_pct"
+  )
+
+full_data$stressor <- factor(
+  full_data$stressor,
+  levels = c(
+    "Varroa mites",
+    "Diseases",
+    "Pesticides",
+    "Other pests/parasites",
+    "Other",
+    "Unknown"
+  )
+)
+```
+
+## Plot
+
+```{r bee-stressor-plot}
+#| label: colony-stressors-state-plot
+#| fig-alt: |
+#|   A grid of plots roughly laid out like the states of the United State of America. There is one plot per state, each displaying a collection of colored areas, with the height corresponding to the percent of a bee colony affected by a particular stressor as measured over time.
+#| column: screen-inset-left
+#| fig-width: 16
+#| fig-height: 9
+
+full_data |>
+  ggplot(aes(x = date, y = stress_pct)) +
+  geom_area(aes(fill = stressor), color = "lightgrey", alpha = 0.6) +
+  facet_geo(~state, grid = "us_state_grid1") +
+  scale_x_date(date_labels = "'%y", date_breaks = "1 year") +
+  scale_fill_okabe_ito() +
+  labs(
+    title = "Bee Colony Stressors in the United States",
+    x = "Year",
+    y = "Colonies affected by stressor (%)",
+    fill = "Stressor"
+  ) +
+  theme(legend.position = 'top')
+```

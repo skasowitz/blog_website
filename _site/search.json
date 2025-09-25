@@ -1,10 +1,10 @@
 [
   {
-    "objectID": "posts/welcome/index.html",
-    "href": "posts/welcome/index.html",
-    "title": "Welcome To My Blog",
+    "objectID": "posts.html",
+    "href": "posts.html",
+    "title": "Data Tales",
     "section": "",
-    "text": "This is the first post in a Quarto blog. Welcome!\n\nSince this post doesn’t specify an explicit image, the first image in the post will be used in the listing page of posts."
+    "text": "Quick Plot: TidyTuesday 2022 Week 2\n\n\n\nTidyTuesday\n\nData visualization\n\nggplot2\n\n\n\nRevisiting an old plot\n\n\n\n\n\nSep 25, 2025\n\n4 min\n\n\n\n\nNo matching items"
   },
   {
     "objectID": "index.html",
@@ -14,25 +14,25 @@
     "text": "GitHub\n  \n  \n    \n     LinkedIn"
   },
   {
-    "objectID": "about.html",
-    "href": "about.html",
-    "title": "About",
-    "section": "",
-    "text": "About this blog"
+    "objectID": "index.html#hi",
+    "href": "index.html#hi",
+    "title": "Seth Kasowitz, PhD",
+    "section": "Hi!",
+    "text": "Hi!\nThanks for visiting my site and blog.\nI’m a scientist with a deep passion for data analysis and visualization. At Addgene, the non-profit life science resource and repository, I helped accelerate scientific research as a senior support scientist and bioinformatics data scientist. This followed long academic adventures in genetics, reproductive biology, and RNA biogenesis.\nThis site is intended as a place to share and explore all things data. Be it clean-up and imputation, exploratory analytics, visualization, or machine learning, I hope to showcase interesting and fun demonstrations with Quarto."
   },
   {
     "objectID": "cv_html.html",
     "href": "cv_html.html",
     "title": "Curriculum Vitae",
     "section": "",
-    "text": "I’m a data scientist and molecular biologist and with extensive experience in genomics, bioinformatics, and large-scale data analysis. I develop machine learning models, integrate mdatasets, and translate complex findings into actionable insights. Strong background in human genetics, statistical genomics, and cross-functional collaboration with a demonstrated ability to lead end-to-end analytics projects, manage databases, and develop reproducible analytics workflows."
+    "text": "I’m a data scientist and molecular biologist and with extensive experience in genomics, bioinformatics, scientific support and large-scale data analysis. I develop machine learning models, integrate datasets, and translate complex findings into actionable insights. Strong background in human genetics, statistical genomics, and cross-functional collaboration with a demonstrated ability to lead end-to-end analytics projects, manage databases, and develop reproducible analytics workflows."
   },
   {
     "objectID": "cv_html.html#professional-experience",
     "href": "cv_html.html#professional-experience",
     "title": "Curriculum Vitae",
     "section": " Professional Experience",
-    "text": "Professional Experience\n\n\n\n\n\nAddgene\n\n\nData Scientist - Bioinformatics July 2022 - Sep 2024\nLed bioinformatics and data science initiatives for organizational data team, developing machine learning models and analytics workflows for large- scale datasets. Collaborated with cross-functional leadership to translate complex requirements into data-driven solutions and strategic initiatives.\nSenior Scientist II - Scientific Support Mar 2019 - July 2022\nProvided expert scientific support to global research community, resolving over 5,000 technical inquiries from academic and industry scientists. Identified workflow bottlenecks and delivered data-driven solutions to accelerate biomedical research progress. Led cross-functional initiatives to optimize organizational processes and enhance material sharing capabilities and developed high-throughput genomics screening protocols."
+    "text": "Professional Experience\n\n\n\n\n\n\n\n\nData Scientist - Bioinformatics July 2022 - Sep 2024\nLed bioinformatics and data science initiatives for organizational data team, developing machine learning models and analytics workflows for large- scale datasets. Collaborated with cross-functional leadership to translate complex requirements into data-driven solutions and strategic initiatives.\nSenior Scientist II - Scientific Support Mar 2019 - July 2022\nProvided expert scientific support to global research community, resolving over 5,000 technical inquiries from academic and industry scientists. Identified workflow bottlenecks and delivered data-driven solutions to accelerate biomedical research progress. Led cross-functional initiatives to optimize organizational processes and enhance material sharing capabilities and developed high-throughput genomics screening protocols."
   },
   {
     "objectID": "cv_html.html#skills",
@@ -70,24 +70,38 @@
     "text": "Professional Development\n\nTeaching Experience: University of Connecticut instructor of record for “Laboratory Techniques in Functional Genomics” and “Experiments in DNA Identification” (2007-2010)\nMentorship: Biology mentor for computer science and engineering co-ops at Addgene (2022-2024); American Society of Andrology Undergraduate Research Internships mentor (2013, 2015)\nProfessional Affiliations: Society for the Study of Reproduction, American Society of Andrology\nJournal Reviewer: Biology of Reproduction, PLoS Genetics, Journal of Cellular Physiology"
   },
   {
-    "objectID": "posts/post-with-code/index.html",
-    "href": "posts/post-with-code/index.html",
-    "title": "Post With Code",
+    "objectID": "posts/2025-09-25_revisiting-tidytuesday-2022wk2/index.html",
+    "href": "posts/2025-09-25_revisiting-tidytuesday-2022wk2/index.html",
+    "title": "Quick Plot: TidyTuesday 2022 Week 2",
     "section": "",
-    "text": "This is a post with executable code."
+    "text": "This is part of a short series of posts revisiting data visualization work on TidyTuesday data sets. The code and plot were initially created on January 11th, 2022. This bee colony collapse data originally comes from the USDA. See the TidyTuesday repo for more information."
   },
   {
-    "objectID": "posts.html",
-    "href": "posts.html",
-    "title": "Data Tales",
-    "section": "",
-    "text": "Post With Code\n\n\n\nnews\n\ncode\n\nanalysis\n\n\n\n\n\n\n\n\n\nSep 23, 2025\n\n\n\n\n\n\n\n\n\n\n\n\nWelcome To My Blog\n\n\n\nnews\n\n\n\n\n\n\n\n\n\nSep 20, 2025\n\n\n\n\n\nNo matching items"
+    "objectID": "posts/2025-09-25_revisiting-tidytuesday-2022wk2/index.html#setup",
+    "href": "posts/2025-09-25_revisiting-tidytuesday-2022wk2/index.html#setup",
+    "title": "Quick Plot: TidyTuesday 2022 Week 2",
+    "section": "\n1 Setup",
+    "text": "1 Setup\n\n1.1 Packages\n\nlibrary(tidyverse)\nlibrary(geofacet)\nlibrary(ggokabeito)\n\n\n1.2 Data\n\ncolony &lt;- readr::read_csv(\n  'https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2022/2022-01-11/colony.csv'\n)\nstressor &lt;- readr::read_csv(\n  'https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2022/2022-01-11/stressor.csv'\n)"
   },
   {
-    "objectID": "index.html#hi",
-    "href": "index.html#hi",
-    "title": "Seth Kasowitz, PhD",
-    "section": "Hi!",
-    "text": "Hi!\nThanks for visiting my site and blog.\nI’m a scientist with a deep passion for data analysis and visualization. At Addgene, the non-profit life science resource and repository, I helped accelerate scientific research as a senior support scientist and bioinformatics data scientist. This followed long academic adventures in genetics, reproductive biology, and RNA biogenesis.\nThis site is intended as a place to share and explore all things data. Be it clean-up and imputation, exploratory analytics, visualization, or machine learning, I hope to showcase interesting and fun demonstrations with Quarto."
+    "objectID": "posts/2025-09-25_revisiting-tidytuesday-2022wk2/index.html#explore-the-data",
+    "href": "posts/2025-09-25_revisiting-tidytuesday-2022wk2/index.html#explore-the-data",
+    "title": "Quick Plot: TidyTuesday 2022 Week 2",
+    "section": "\n2 Explore the data",
+    "text": "2 Explore the data\nPeak at the data as provided…\n\nglimpse(colony)\n\nRows: 1,222\nColumns: 10\n$ year            &lt;dbl&gt; 2015, 2015, 2015, 2015, 2015, 2015, 2015, 2015, 2015, …\n$ months          &lt;chr&gt; \"January-March\", \"January-March\", \"January-March\", \"Ja…\n$ state           &lt;chr&gt; \"Alabama\", \"Arizona\", \"Arkansas\", \"California\", \"Color…\n$ colony_n        &lt;dbl&gt; 7000, 35000, 13000, 1440000, 3500, 3900, 305000, 10400…\n$ colony_max      &lt;dbl&gt; 7000, 35000, 14000, 1690000, 12500, 3900, 315000, 1050…\n$ colony_lost     &lt;dbl&gt; 1800, 4600, 1500, 255000, 1500, 870, 42000, 14500, 380…\n$ colony_lost_pct &lt;dbl&gt; 26, 13, 11, 15, 12, 22, 13, 14, 4, 4, 40, 22, 18, 23, …\n$ colony_added    &lt;dbl&gt; 2800, 3400, 1200, 250000, 200, 290, 54000, 47000, 3400…\n$ colony_reno     &lt;dbl&gt; 250, 2100, 90, 124000, 140, NA, 25000, 9500, 760, 8000…\n$ colony_reno_pct &lt;dbl&gt; 4, 6, 1, 7, 1, NA, 8, 9, 7, 9, 4, 1, 2, 1, NA, 13, NA,…\n\n\n…quick overview of the data types and completeness\n\nskimr::skim(colony)\n\n\nData summary\n\n\nName\ncolony\n\n\nNumber of rows\n1222\n\n\nNumber of columns\n10\n\n\n_______________________\n\n\n\nColumn type frequency:\n\n\n\ncharacter\n2\n\n\nnumeric\n8\n\n\n________________________\n\n\n\nGroup variables\nNone\n\n\n\nVariable type: character\n\n\n\n\n\n\n\n\n\n\n\n\nskim_variable\nn_missing\ncomplete_rate\nmin\nmax\nempty\nn_unique\nwhitespace\n\n\n\nmonths\n0\n1\n10\n16\n0\n4\n0\n\n\nstate\n0\n1\n4\n14\n0\n47\n0\n\n\n\nVariable type: numeric\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nskim_variable\nn_missing\ncomplete_rate\nmean\nsd\np0\np25\np50\np75\np100\nhist\n\n\n\nyear\n0\n1.00\n2017.77\n1.89\n2015\n2016\n2018\n2019\n2021\n▇▃▃▃▆\n\n\ncolony_n\n47\n0.96\n123578.04\n437835.18\n1300\n8000\n17500\n55500\n3181180\n▇▁▁▁▁\n\n\ncolony_max\n72\n0.94\n79112.77\n190823.42\n1700\n9000\n21000\n68750\n1710000\n▇▁▁▁▁\n\n\ncolony_lost\n47\n0.96\n16551.32\n60544.42\n20\n950\n2200\n6500\n502350\n▇▁▁▁▁\n\n\ncolony_lost_pct\n54\n0.96\n11.38\n7.23\n1\n6\n10\n15\n52\n▇▅▁▁▁\n\n\ncolony_added\n83\n0.93\n17243.20\n68167.65\n10\n420\n1800\n6500\n736920\n▇▁▁▁▁\n\n\ncolony_reno\n131\n0.89\n15278.86\n62588.04\n10\n260\n960\n4585\n806170\n▇▁▁▁▁\n\n\ncolony_reno_pct\n260\n0.79\n9.10\n9.66\n1\n2\n6\n12\n77\n▇▁▁▁▁\n\n\n\n\n\n\ncolony |&gt;\n  count(year, months) |&gt;\n  ggplot(aes(x = year, y = n, fill = months)) +\n  geom_col() +\n  scale_fill_okabe_ito() +\n  scale_x_continuous(breaks = scales::breaks_width(1)) +\n  labs(\n    title = 'Quarterly rows of data per year',\n    subtitle = 'Expect one per state',\n    y = '',\n    x = 'Year'\n  ) +\n  theme_bw() +\n  theme(legend.position = 'bottom', )\n\n\n\n\n\n\n\n\ncolony |&gt;\n  summarise(n = sum(colony_n), .by = c(year, months)) |&gt;\n  ggplot(aes(x = year, y = months, size = n / 1000000)) +\n  geom_point(show.legend = FALSE) +\n  scale_x_continuous(breaks = scales::breaks_width(1)) +\n  theme_bw() +\n  labs(title = 'Total colony sizes (n)', x = 'Year', y = 'Quarter')\n\n\n\n\n\n\n\nNo bees in 2019Q2. That seems unlikely.\n\ncolony |&gt;\n  filter(year == 2019, months == 'April-June')\n\n# A tibble: 47 × 10\n    year months     state       colony_n colony_max colony_lost colony_lost_pct\n   &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;          &lt;dbl&gt;      &lt;dbl&gt;       &lt;dbl&gt;           &lt;dbl&gt;\n 1  2019 April-June Alabama           NA         NA          NA              NA\n 2  2019 April-June Arizona           NA         NA          NA              NA\n 3  2019 April-June Arkansas          NA         NA          NA              NA\n 4  2019 April-June California        NA         NA          NA              NA\n 5  2019 April-June Colorado          NA         NA          NA              NA\n 6  2019 April-June Connecticut       NA         NA          NA              NA\n 7  2019 April-June Florida           NA         NA          NA              NA\n 8  2019 April-June Georgia           NA         NA          NA              NA\n 9  2019 April-June Hawaii            NA         NA          NA              NA\n10  2019 April-June Idaho             NA         NA          NA              NA\n# ℹ 37 more rows\n# ℹ 3 more variables: colony_added &lt;dbl&gt;, colony_reno &lt;dbl&gt;,\n#   colony_reno_pct &lt;dbl&gt;\n\n\nThat’s no good, we’ll likely want to drop this quarter’s data from both data sets. First, let us take a quick look at the stressor data.\n\nglimpse(stressor)\n\nRows: 7,332\nColumns: 5\n$ year       &lt;dbl&gt; 2015, 2015, 2015, 2015, 2015, 2015, 2015, 2015, 2015, 2015,…\n$ months     &lt;chr&gt; \"January-March\", \"January-March\", \"January-March\", \"January…\n$ state      &lt;chr&gt; \"Alabama\", \"Alabama\", \"Alabama\", \"Alabama\", \"Alabama\", \"Ala…\n$ stressor   &lt;chr&gt; \"Varroa mites\", \"Other pests/parasites\", \"Disesases\", \"Pest…\n$ stress_pct &lt;dbl&gt; 10.0, 5.4, NA, 2.2, 9.1, 9.4, 26.9, 20.5, 0.1, NA, 1.8, 3.1…\n\n\nAnd checking 2019Q2 in this data we find the same issue!\n\nstressor |&gt;\n  filter(year == 2019, months == 'April-June')\n\n# A tibble: 282 × 5\n    year months     state   stressor              stress_pct\n   &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;   &lt;chr&gt;                      &lt;dbl&gt;\n 1  2019 April-June Alabama Varroa mites                  NA\n 2  2019 April-June Alabama Other pests/parasites         NA\n 3  2019 April-June Alabama Disesases                     NA\n 4  2019 April-June Alabama Pesticides                    NA\n 5  2019 April-June Alabama Other                         NA\n 6  2019 April-June Alabama Unknown                       NA\n 7  2019 April-June Arizona Varroa mites                  NA\n 8  2019 April-June Arizona Other pests/parasites         NA\n 9  2019 April-June Arizona Disesases                     NA\n10  2019 April-June Arizona Pesticides                    NA\n# ℹ 272 more rows"
+  },
+  {
+    "objectID": "posts/2025-09-25_revisiting-tidytuesday-2022wk2/index.html#data-prep",
+    "href": "posts/2025-09-25_revisiting-tidytuesday-2022wk2/index.html#data-prep",
+    "title": "Quick Plot: TidyTuesday 2022 Week 2",
+    "section": "\n3 Data Prep",
+    "text": "3 Data Prep\nCreate a date variable and filter out rows for 2019Q2\n\ncol_data &lt;- colony |&gt;\n  mutate(\n    quarter = case_when(\n      months == \"January-March\" ~ \"Q1\",\n      months == \"April-June\" ~ \"Q2\",\n      months == \"July-September\" ~ \"Q3\",\n      months == \"October-December\" ~ \"Q4\"\n    )\n  ) |&gt;\n  unite(yearquarter, c(\"year\", \"quarter\")) |&gt;\n  mutate(date = yq(yearquarter)) |&gt;\n  filter(yearquarter != '2019_Q2')\n\nstress_data &lt;- stressor |&gt;\n  mutate(\n    quarter = case_when(\n      months == \"January-March\" ~ \"Q1\",\n      months == \"April-June\" ~ \"Q2\",\n      months == \"July-September\" ~ \"Q3\",\n      months == \"October-December\" ~ \"Q4\"\n    )\n  ) |&gt;\n  unite(yearquarter, c(\"year\", \"quarter\")) |&gt;\n  mutate(date = yq(yearquarter)) |&gt;\n  filter(yearquarter != '2019_Q2')\n\nReplace missing stress_pct data with 0, break out stressors into individual columns, and correct a mispelled variable name.\n\nstress_data &lt;- stress_data |&gt;\n  replace_na(list(stress_pct = 0)) |&gt;\n  pivot_wider(\n    names_from = stressor,\n    values_from = stress_pct,\n    values_fill = 0\n  ) |&gt;\n  unite(id, c('state', 'yearquarter')) |&gt;\n  rename(Diseases = Disesases)\n\nJoin data sets\n\nfull_data &lt;- col_data |&gt;\n  unite(id, c(\"state\", \"yearquarter\"), remove = FALSE) |&gt;\n  left_join(\n    stress_data |&gt;\n      select(-months, -date)\n  ) |&gt;\n  pivot_longer(\n    c(\"Varroa mites\":\"Unknown\"),\n    names_to = \"stressor\",\n    values_to = \"stress_pct\"\n  )\n\nfull_data$stressor &lt;- factor(\n  full_data$stressor,\n  levels = c(\n    \"Varroa mites\",\n    \"Diseases\",\n    \"Pesticides\",\n    \"Other pests/parasites\",\n    \"Other\",\n    \"Unknown\"\n  )\n)"
+  },
+  {
+    "objectID": "posts/2025-09-25_revisiting-tidytuesday-2022wk2/index.html#plot",
+    "href": "posts/2025-09-25_revisiting-tidytuesday-2022wk2/index.html#plot",
+    "title": "Quick Plot: TidyTuesday 2022 Week 2",
+    "section": "\n4 Plot",
+    "text": "4 Plot\n\nfull_data |&gt;\n  ggplot(aes(x = date, y = stress_pct)) +\n  geom_area(aes(fill = stressor), color = \"lightgrey\", alpha = 0.6) +\n  facet_geo(~state, grid = \"us_state_grid1\") +\n  scale_x_date(date_labels = \"'%y\", date_breaks = \"1 year\") +\n  scale_fill_okabe_ito() +\n  labs(\n    title = \"Bee Colony Stressors in the United States\",\n    x = \"Year\",\n    y = \"Colonies affected by stressor (%)\",\n    fill = \"Stressor\"\n  ) +\n  theme(legend.position = 'top')"
   }
 ]

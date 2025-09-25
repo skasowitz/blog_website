@@ -45,10 +45,13 @@ website:
       - text: "{{< iconify simple-icons bluesky >}}"
         href: https://bsky.app/profile/skasowitz.bsky.social
 
-page-footer:
-  border: true
-  left: "&#169; 2025 Seth Kasowitz"
-  right: "Made with [Quarto](https://quarto.org)"
+  page-footer:
+    border: true
+    left: "&#169; 2025 Seth Kasowitz"
+    center:
+      - text: MIT License
+        href: LICENSE
+    right: "Made with [Quarto](https://quarto.org)"
 
 format:
   html:

@@ -25,9 +25,9 @@ $black:  #000;
 
 // colors
 $teal:        #0b7366;
-$blue:        #5b5bffff;
-$blue-light:  #2727e01e;
-$blue-dark:   #0b0b8dff;
+$blue:        #3e3eccff;
+$blue-light:  #c1c1d134;
+$blue-dark:   #080875ff;
 $teal-light:  #f6fafa;
 $teal-dark:   #07483f;
 $orange:      #a98069;
@@ -42,7 +42,7 @@ $dark:          $gray-9;
 
 // Base document colors
 $navbar-bg: $primary; // navbar
-$navbar-fg: $blue-dark; // navbar foreground elements
+$navbar-fg: $gray-3; // navbar foreground elements
 $navbar-hl: $white; // highlight color when hovering over navbar links
 $link-color: $orange-dark; // hyperlinks
 
@@ -317,8 +317,8 @@ div.quarto-post .listing-categories .listing-category {
 
 div.quarto-post .listing-categories .listing-category, .quarto-category, .btn {
   opacity: 0.8 !important;
-  color: $secondary;
-  border-color: $secondary;
+  color: $gray-8;
+  border-color: $gray-8;
   text-align: center;
   border-style: solid;
   text-decoration: none;
