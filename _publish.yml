@@ -1,0 +1,4 @@
+- source: project
+  netlify:
+    - id: 37151be2-8d7b-4d82-b3d6-247bb77d1ee3
+      url: https://seth-kasowitz-blog.netlify.app

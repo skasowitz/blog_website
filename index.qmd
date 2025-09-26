@@ -17,6 +17,9 @@ about:
     - icon: linkedin
       text: LinkedIn
       href: https://www.linkedin.com/in/seth-kasowitz
+    - icon: stack-overflow
+      text: Stack Overflow
+      href: https://stackoverflow.com/users/19316600/seth
     - text: "{{< iconify simple-icons bluesky >}}"
       href: https://bsky.app/profile/skasowitz.bsky.social
 toc: false

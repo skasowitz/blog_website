@@ -1,9 +1,11 @@
 {
-  "hash": "e17ec377f4e594d74cf3621e18a2bbf4",
+  "hash": "fe8a8b5997540bee4daf5e72cb081478",
   "result": {
     "engine": "knitr",
     "markdown": "---\ntitle: \"Data Tales\"\ndescription-meta: \"A blog for data science and visualization, biology, and code.\"\nlisting:\n  contents: posts\n  feed: true\n  sort: \"date desc\"\n  type: default\n  categories: true\n  sort-ui: false\n  filter-ui: false\n  image-align: left\n  page-size: 5\n  fields:\n    - title\n    - description\n    - date\n    - image\n    - categories\n    - reading-time\npage-layout: full\ntitle-block-banner: true\n---\n\n\n",
-    "supporting": [],
+    "supporting": [
+      "posts_files"
+    ],
     "filters": [
       "rmarkdown/pagebreak.lua"
     ],
