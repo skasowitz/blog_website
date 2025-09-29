@@ -20,7 +20,7 @@ about:
     - icon: stack-overflow
       text: Stack Overflow
       href: https://stackoverflow.com/users/19316600/seth
-    - text: "{{< iconify simple-icons bluesky >}}"
+    - text: "{{< iconify simple-icons bluesky >}} Bluesky"
       href: https://bsky.app/profile/skasowitz.bsky.social
 toc: false
 anchor-sections: false

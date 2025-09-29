@@ -1,6 +1,6 @@
 ---
 title: "Quick Plot: TidyTuesday 2022 Week 2"
-description: "Revisiting an old plot"
+description: "Revisiting bee colony stress data"
 date: "2025-09-25"
 image: featured.png
 image-alt: A grid of plots roughly laid out like the states of the United State of America. There is one plot per state, each displaying a collection of colored areas, with the height corresponding to the percent of a bee colony affected by a particular stressor as measured over time.

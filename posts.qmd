@@ -38,7 +38,7 @@ posts <- list.dirs(
 slugs <- gsub("^.*_", "", posts)
 
 # lines to insert to a netlify _redirect file
-redirects <- paste0("\\posts\\", slugs, " ", "\\posts\\", posts)
+redirects <- paste0("/posts/", slugs, " ", "/posts/", posts)
 
 # write the _redirect file
 writeLines(redirects, here::here("_redirects"))
