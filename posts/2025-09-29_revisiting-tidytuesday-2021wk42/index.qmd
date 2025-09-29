@@ -1,0 +1,184 @@
+---
+title: "Quick Plot: TidyTuesday 2021 Week 42"
+description: "Revisiting data about big pumpkins"
+date: "2025-09-29"
+image: featured.png
+image-alt: A grid of bar plots displaying the annual top 10 states and provinces by average pumpkin weight.
+categories:
+  - TidyTuesday
+  - Data visualization
+  - ggplot2
+toc: true
+number-sections: true
+citation: true
+format: html
+execute:
+  echo: true
+  warning: false
+---
+
+The second of three posts revisiting old data visualization work on TidyTuesday data sets. The code and plot were initially created on October 22nd, 2021. The pumpkin weight data was originally sourced from [BigPumpkins.com](https://www.bigpumpkins.com/ViewArticle.asp?id=132). See the [TidyTuesday repo](https://github.com/rfordatascience/tidytuesday/tree/main/data/2021/2021-10-19 "TidyTuesday Github Repo for 2021wk42") for more information.
+
+## Setup
+
+### Packages
+
+```{r setup}
+library(tidyverse)
+library(ggridges)
+library(ggthemes)
+library(tidytext)
+library(geofacet)
+theme_set(theme_tufte())
+```
+
+### Load Data
+
+```{r load-data}
+tuesdata <- tidytuesdayR::tt_load(2021, week = 43)
+pumpkins <- tuesdata$pumpkins
+```
+
+## Data Prep
+
+```{r quick-look}
+glimpse(pumpkins)
+```
+
+Some light cleanup will make this pumpkin data easier to visualize.
+
+-   Several variables contain numeric data but are `character` types
+-   Some missing data (`NA`) can be dropped
+-   The `id` contains two pieces of data that it would be convenient to separate
+-   There are some rows with wonky data that we should filter out entirely. *e.g.*
+
+```{r odd-data}
+#| echo: FALSE
+pumpkins |> slice(28065) |> gt::gt()
+```
+
+### Data cleanup
+
+```{r data-cleaning}
+pumpkins <- pumpkins |>
+  mutate(
+    across(weight_lbs, parse_number),
+    across(place, as.numeric),
+    across(ott, as.numeric),
+    across(est_weight, as.numeric),
+    across(pct_chart, as.numeric)
+  ) |>
+  drop_na(place) |> # type coercion introduces some NAs
+  separate(id, c("year", "type"), sep = "-") |>
+  filter(!str_detect(country, ",")) |>
+  mutate(
+    type = fct_recode(
+      type,
+      "Field Pumpkin" = "F",
+      "Giant Pumpkin" = "P",
+      "Giant Squash" = "S",
+      "Giant Watermelon" = "W",
+      "Long Gourd" = "L",
+      "Tomato" = "T"
+    )
+  )
+```
+
+## Quick Plots
+
+### Density Ridges
+
+```{r density-ridge-plot}
+#| fig-alt: |
+#|   A column of density ridge plots with jittered points scattered beneath each ridge. The ridges are filled by quantile, breaking each area into 4 sections.
+
+pumpkins |>
+  ggplot(aes(y = type, x = weight_lbs, fill = factor(stat(quantile)))) +
+  stat_density_ridges(
+    geom = "density_ridges_gradient",
+    calc_ecdf = TRUE,
+    quantiles = 4,
+    quantile_lines = TRUE,
+    jittered_points = TRUE,
+    position = position_raincloud(adjust_vlines = TRUE),
+    point_size = 0.4,
+    point_alpha = 0.2,
+    vline_width = 0
+  ) +
+  scale_fill_tableau(palette = "Tableau 10") +
+  labs(x = 'Weight (lbs)', y = '') +
+  theme(legend.position = 'none')
+```
+
+### Regional and global variations in annual average weights
+
+```{r avg-weight-bars}
+#| fig-alt: |
+#|   A 3x3 grid of bar charts tracking the top 10 heaviest pumpkins by weight.
+#| column: page-right
+#| fig-width: 9
+#| fig-height: 8
+
+pumpkins |>
+  group_by(year, state_prov) |>
+  summarize(avg_weight = mean(weight_lbs, na.rm = T)) |>
+  slice_max(avg_weight, n = 10) |>
+  ungroup() |>
+  inner_join(
+    pumpkins |>
+      select(state_prov, country),
+    by = "state_prov",
+    relationship = "many-to-many"
+  ) |>
+  distinct() |>
+  mutate(state_prov = reorder_within(state_prov, avg_weight, year)) |>
+  ggplot(aes(avg_weight, state_prov, fill = country)) +
+  geom_col() +
+  facet_wrap(. ~ year, scales = "free_y") +
+  scale_y_reordered() +
+  scale_fill_tableau(palette = "Tableau 20") +
+  scale_x_continuous(breaks = scales::breaks_pretty(n = 3)) +
+  theme(
+    strip.text = element_text(size = 15, face = "bold"),
+    axis.title = element_text(size = 14),
+    axis.text = element_text(size = 12),
+    plot.title = element_text(size = 18)
+  ) +
+  labs(
+    x = "Average Pumpkin Weight",
+    y = "",
+    title = str_wrap(
+      "Top 10 Yearly Average Pumpkin Weights per State/Province by Country",
+      width = 40
+    )
+  )
+```
+
+### US Average Weights by State
+
+There was a time when I really liked the idea of laying out small plots in rough map shapes. This one works out alright, but that certainly isn't always true.
+
+```{r us-states-lines}
+#| fig-alt: |
+#|   A grid of plots roughly laid out like the US states. Each plot is a line graph tracking average weights by year.
+#| column: page
+#| fig-width: 15
+#| fig-height: 7
+
+pumpkins |>
+  filter(country == "United States") |>
+  group_by(year, type, state_prov) |>
+  summarize(avg_weight = mean(weight_lbs, na.rm = T)) |>
+  ungroup() |>
+  ggplot(aes(as.numeric(year), avg_weight, color = type)) +
+  geom_line(linewidth = 1) +
+  facet_geo(~state_prov, label = "name", scales = "free") +
+  scale_x_continuous(breaks = seq(2013, 2021, 3)) +
+  scale_color_tableau() +
+  labs(
+    x = "Year",
+    y = "Average Weight",
+    color = "Pumpkin Type",
+    title = "State-wise Pumpkin Average Weight"
+  )
+```
