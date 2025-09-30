@@ -1,0 +1,97 @@
+---
+title: "Quick Plot: TidyTuesday 2021 Week 45"
+description: "Exploring geocomputation with R"
+date: "2025-09-30"
+image: featured.png
+image-alt: A grid of bar plots displaying the annual top 10 states and provinces by average pumpkin weight.
+categories:
+  - TidyTuesday
+  - Data visualization
+  - ggplot2
+toc: true
+number-sections: true
+citation: true
+format: html
+execute:
+  echo: true
+  warning: false
+---
+
+The third of three posts revisiting old data visualization work on TidyTuesday data sets. The code and plot were initially created on November 2nd, 2021. This was an interesting and unusual TidyTuesday, exploring a book instead of a dataset. This week's exercise was an introduction to geocomputation through the resource, [Geocomputation with R](https://r.geocompx.org/). See the [TidyTuesday repo](https://github.com/rfordatascience/tidytuesday/tree/main/data/2021/2021-11-02 "TidyTuesday Github Repo for 2021wk45") for more information.
+
+## Setup
+
+### (Install) and Load Packages
+
+```{r setup, include=FALSE}
+
+# install.packages(
+#   "spDataLarge",
+#   repos = "https://nowosad.github.io/drat/",
+#   type = "source"
+# )
+
+library(spData)
+library(spDataLarge)
+library(tidyverse)
+library(sf)
+library(raster)
+library(tmap)
+library(dplyr)
+library(leaflet)
+library(ggplot2)
+```
+
+### Read in data
+
+```{r read-data}
+nz_elev = terra::rast(system.file(
+  "raster/nz_elev.tif",
+  package = "spDataLarge"
+))
+```
+
+
+```{r fill-layer}
+# Add fill layer to nz shape
+tm_shape(nz) +
+  tm_fill()
+```
+
+
+```{r border-layer}
+# Add border layer to nz shape
+tm_shape(nz) +
+  tm_borders()
+```
+
+
+```{r fill-and-border}
+# Add fill and border layers to nz shape
+tm_shape(nz) +
+  tm_fill() +
+  tm_borders()
+```
+
+
+```{r}
+map_nz = tm_shape(nz) + tm_polygons()
+map_nz1 = map_nz +
+  tm_shape(nz_elev) +
+  tm_raster(alpha = 0.7)
+
+nz_water = st_union(nz) %>% st_buffer(22200) %>% st_cast(to = "LINESTRING")
+
+map_nz2 = map_nz1 +
+  tm_shape(nz_water) +
+  tm_lines()
+
+map_nz3 = map_nz2 +
+  tm_shape(nz_height) +
+  tm_dots()
+```
+
+
+```{r}
+tmap_arrange(map_nz1, map_nz2, map_nz3)
+```
