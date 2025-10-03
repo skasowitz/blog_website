@@ -5,6 +5,7 @@ date: "2025-09-29"
 image: featured.png
 image-alt: A grid of bar plots displaying the annual top 10 states and provinces by average pumpkin weight.
 categories:
+  - R
   - TidyTuesday
   - Data visualization
   - ggplot2

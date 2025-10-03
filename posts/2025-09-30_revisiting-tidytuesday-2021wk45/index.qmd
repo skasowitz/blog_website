@@ -3,11 +3,13 @@ title: "Quick Plot: TidyTuesday 2021 Week 45"
 description: "Exploring geocomputation with R"
 date: "2025-09-30"
 image: featured.png
-image-alt: A grid of bar plots displaying the annual top 10 states and provinces by average pumpkin weight.
+image-alt: A map of New Zealand featuring regional borders, elevation gradient, and indicating the highest points with dots.
 categories:
   - TidyTuesday
   - Data visualization
+  - R
   - ggplot2
+  - Geospatial
 toc: true
 number-sections: true
 citation: true
@@ -52,46 +54,65 @@ nz_elev = terra::rast(system.file(
 ```
 
 
+
+## Create some maps
+
+### Add a fill layer to the shape of New Zealand
+
 ```{r fill-layer}
-# Add fill layer to nz shape
 tm_shape(nz) +
   tm_fill()
 ```
 
+### Draw the borders
 
 ```{r border-layer}
-# Add border layer to nz shape
 tm_shape(nz) +
   tm_borders()
 ```
 
+### Combine the fill and borders layers
 
 ```{r fill-and-border}
-# Add fill and border layers to nz shape
 tm_shape(nz) +
   tm_fill() +
   tm_borders()
 ```
 
+### Display multiple data sources on a map
 
-```{r}
+1.  Begin with a 
+```{r nz-map}
 map_nz = tm_shape(nz) + tm_polygons()
+map_nz
+```
+
+2. Add elevation data
+
+```{r nz-elevation}
 map_nz1 = map_nz +
   tm_shape(nz_elev) +
-  tm_raster(alpha = 0.7)
+  tm_raster(col_alpha = 0.7)
+```
 
+3. Surround the geometry with a buffer region representing water
+
+```{r nz-water-region}
 nz_water = st_union(nz) %>% st_buffer(22200) %>% st_cast(to = "LINESTRING")
 
 map_nz2 = map_nz1 +
   tm_shape(nz_water) +
   tm_lines()
+```
 
+4. Draw dots at the 101 highest points in New Zealand
+
+```{r nz-highest-points}
 map_nz3 = map_nz2 +
   tm_shape(nz_height) +
   tm_dots()
 ```
 
-
-```{r}
+```{r draw-map-panel}
 tmap_arrange(map_nz1, map_nz2, map_nz3)
 ```
