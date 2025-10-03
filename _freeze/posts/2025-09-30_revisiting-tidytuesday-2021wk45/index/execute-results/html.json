@@ -1,0 +1,17 @@
+{
+  "hash": "23fc71c9c8d1949255b589931b94387e",
+  "result": {
+    "engine": "knitr",
+    "markdown": "---\ntitle: \"Quick Plot: TidyTuesday 2021 Week 45\"\ndescription: \"Exploring geocomputation with R\"\ndate: \"2025-09-30\"\nimage: featured.png\nimage-alt: A grid of bar plots displaying the annual top 10 states and provinces by average pumpkin weight.\ncategories:\n  - TidyTuesday\n  - Data visualization\n  - R\n  - ggplot2\n  - Geospatial\ntoc: true\nnumber-sections: true\ncitation: true\nformat: html\nexecute:\n  echo: true\n  warning: false\n---\n\nThe third of three posts revisiting old data visualization work on TidyTuesday data sets. The code and plot were initially created on November 2nd, 2021. This was an interesting and unusual TidyTuesday, exploring a book instead of a dataset. This week's exercise was an introduction to geocomputation through the resource, [Geocomputation with R](https://r.geocompx.org/). See the [TidyTuesday repo](https://github.com/rfordatascience/tidytuesday/tree/main/data/2021/2021-11-02 \"TidyTuesday Github Repo for 2021wk45\") for more information.\n\n## Setup\n\n### (Install) and Load Packages\n\n\n\n### Read in data\n\n\n::: {.cell}\n\n```{.r .cell-code}\nnz_elev = terra::rast(system.file(\n  \"raster/nz_elev.tif\",\n  package = \"spDataLarge\"\n))\n```\n:::\n\n\n\n\n## Create some maps\n\n### Add a fill layer to the shape of New Zealand\n\n\n::: {.cell}\n\n```{.r .cell-code}\ntm_shape(nz) +\n  tm_fill()\n```\n\n::: {.cell-output-display}\n![](index_files/figure-html/fill-layer-1.png){width=672}\n:::\n:::\n\n\n### Draw the borders\n\n\n::: {.cell}\n\n```{.r .cell-code}\ntm_shape(nz) +\n  tm_borders()\n```\n\n::: {.cell-output-display}\n![](index_files/figure-html/border-layer-1.png){width=672}\n:::\n:::\n\n\n### Combine the fill and borders layers\n\n\n::: {.cell}\n\n```{.r .cell-code}\ntm_shape(nz) +\n  tm_fill() +\n  tm_borders()\n```\n\n::: {.cell-output-display}\n![](index_files/figure-html/fill-and-border-1.png){width=672}\n:::\n:::\n\n\n### Display multiple data sources on a map\n\n1.  Begin with a \n\n::: {.cell}\n\n```{.r .cell-code}\nmap_nz = tm_shape(nz) + tm_polygons()\nmap_nz\n```\n\n::: {.cell-output-display}\n![](index_files/figure-html/nz-map-1.png){width=672}\n:::\n:::\n\n\n2. Add elevation data\n\n\n::: {.cell}\n\n```{.r .cell-code}\nmap_nz1 = map_nz +\n  tm_shape(nz_elev) +\n  tm_raster(col_alpha = 0.7)\n```\n:::\n\n\n3. Surround the geometry with a buffer region representing water\n\n\n::: {.cell}\n\n```{.r .cell-code}\nnz_water = st_union(nz) %>% st_buffer(22200) %>% st_cast(to = \"LINESTRING\")\n\nmap_nz2 = map_nz1 +\n  tm_shape(nz_water) +\n  tm_lines()\n```\n:::\n\n\n4. Draw dots at the 101 highest points in New Zealand\n\n\n::: {.cell}\n\n```{.r .cell-code}\nmap_nz3 = map_nz2 +\n  tm_shape(nz_height) +\n  tm_dots()\n```\n:::\n\n\n\n::: {.cell}\n\n```{.r .cell-code}\ntmap_arrange(map_nz1, map_nz2, map_nz3)\n```\n\n::: {.cell-output-display}\n![](index_files/figure-html/unnamed-chunk-1-1.png){width=672}\n:::\n:::\n",
+    "supporting": [
+      "index_files"
+    ],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

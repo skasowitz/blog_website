@@ -1,0 +1,118 @@
+---
+title: "Quick Plot: TidyTuesday 2021 Week 45"
+description: "Exploring geocomputation with R"
+date: "2025-09-30"
+image: featured.png
+image-alt: A map of New Zealand featuring regional borders, elevation gradient, and indicating the highest points with dots.
+categories:
+  - TidyTuesday
+  - Data visualization
+  - R
+  - ggplot2
+  - Geospatial
+toc: true
+number-sections: true
+citation: true
+format: html
+execute:
+  echo: true
+  warning: false
+---
+
+The third of three posts revisiting old data visualization work on TidyTuesday data sets. The code and plot were initially created on November 2nd, 2021. This was an interesting and unusual TidyTuesday, exploring a book instead of a dataset. This week's exercise was an introduction to geocomputation through the resource, [Geocomputation with R](https://r.geocompx.org/). See the [TidyTuesday repo](https://github.com/rfordatascience/tidytuesday/tree/main/data/2021/2021-11-02 "TidyTuesday Github Repo for 2021wk45") for more information.
+
+## Setup
+
+### (Install) and Load Packages
+
+```{r setup, include=FALSE}
+
+# install.packages(
+#   "spDataLarge",
+#   repos = "https://nowosad.github.io/drat/",
+#   type = "source"
+# )
+
+library(spData)
+library(spDataLarge)
+library(tidyverse)
+library(sf)
+library(raster)
+library(tmap)
+library(dplyr)
+library(leaflet)
+library(ggplot2)
+```
+
+### Read in data
+
+```{r read-data}
+nz_elev = terra::rast(system.file(
+  "raster/nz_elev.tif",
+  package = "spDataLarge"
+))
+```
+
+
+
+## Create some maps
+
+### Add a fill layer to the shape of New Zealand
+
+```{r fill-layer}
+tm_shape(nz) +
+  tm_fill()
+```
+
+### Draw the borders
+
+```{r border-layer}
+tm_shape(nz) +
+  tm_borders()
+```
+
+### Combine the fill and borders layers
+
+```{r fill-and-border}
+tm_shape(nz) +
+  tm_fill() +
+  tm_borders()
+```
+
+### Display multiple data sources on a map
+
+1.  Begin with a 
+```{r nz-map}
+map_nz = tm_shape(nz) + tm_polygons()
+map_nz
+```
+
+2. Add elevation data
+
+```{r nz-elevation}
+map_nz1 = map_nz +
+  tm_shape(nz_elev) +
+  tm_raster(col_alpha = 0.7)
+```
+
+3. Surround the geometry with a buffer region representing water
+
+```{r nz-water-region}
+nz_water = st_union(nz) %>% st_buffer(22200) %>% st_cast(to = "LINESTRING")
+
+map_nz2 = map_nz1 +
+  tm_shape(nz_water) +
+  tm_lines()
+```
+
+4. Draw dots at the 101 highest points in New Zealand
+
+```{r nz-highest-points}
+map_nz3 = map_nz2 +
+  tm_shape(nz_height) +
+  tm_dots()
+```
+
+```{r draw-map-panel}
+tmap_arrange(map_nz1, map_nz2, map_nz3)
+```
