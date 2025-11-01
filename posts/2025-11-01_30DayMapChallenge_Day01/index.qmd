@@ -3,7 +3,7 @@ title: "30DayMapChallenge Day 01 - Points"
 description: "First look at working with maps in Python"
 date: "2025-11-01"
 image: featured.png
-image-alt: A map of New Zealand featuring regional borders, elevation gradient, and indicating the highest points with dots.
+image-alt: A map of New York City with 2025 Election Day polling places marked as points.
 categories:
   - 30DayMapChallenge
   - Data visualization
@@ -88,10 +88,15 @@ nybb_dat["boundary"] = nybb_dat.boundary
 ```
 
 ```{python}
+# | column: page-right
+# | fig-width: 12
+# | fig-height: 12
+
 # Draw the map
 ax = nybb_dat["boundary"].plot()
 ax.set_axis_off()
-polling_gdf["geometry"].plot(
-    figsize=(12, 12), dpi=72, ax=ax, color="black", markersize=1
-).set_title("NYC Election Day Polling Sites: 2025")
+plot = polling_gdf["geometry"].plot(
+    figsize=(16, 16), ax=ax, color="black", markersize=1
+)
+plot.set_title("NYC Election Day Polling Sites: 2025")
 ```
