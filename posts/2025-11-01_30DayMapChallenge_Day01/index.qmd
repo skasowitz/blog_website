@@ -1,0 +1,97 @@
+---
+title: "30DayMapChallenge Day 01 - Points"
+description: "First look at working with maps in Python"
+date: "2025-11-01"
+image: featured.png
+image-alt: A map of New Zealand featuring regional borders, elevation gradient, and indicating the highest points with dots.
+categories:
+  - 30DayMapChallenge
+  - Data visualization
+  - Python
+  - Geospatial
+toc: true
+number-sections: true
+citation: true
+format:
+  html:
+    code-fold: true
+    code-summary: "Show the code"
+execute:
+  echo: true
+  warning: false
+jupyter: python3
+---
+
+The [#30DayMapChallenge](https://30daymapchallenge.com/) may happen every November, but it still managed to completely sneak up on me. The first day's challenge asks us to create a map with point data, and given the timing I am looking at the voting locations for New York City. The data is retrieved with the ArcGIS API ((data overview)[https://www.arcgis.com/home/item.html?id=23a056702cfd40848deef9597945a998#overview]).
+
+## Setup
+```{python}
+
+import json
+import pandas as pd
+import geopandas as gpd
+from geodatasets import get_path
+
+from arcgis.gis import GIS
+from arcgis.features import FeatureLayer
+
+gis = GIS()
+```
+
+## Retrieve Data
+
+```{python}
+polling_locs = gis.content.get('23a056702cfd40848deef9597945a998')
+```
+
+This Feature Layer Collection has 5 layers
+
+```{python}
+for feature_layer in polling_locs.layers:
+    print(feature_layer.properties.name)
+```
+
+For this map I decided to look at the NYC Election Day polling locations. First, retrieve the data with a `query` on the `FeatureLayer`.
+
+```{python}
+nyc_election_day_url = 'https://services6.arcgis.com/EbVsqZ18sv1kVJ3k/arcgis/rest/services/NYS_Elections_Districts_and_Polling_Locations/FeatureServer/3'
+nyc_election_day = FeatureLayer(nyc_election_day_url)
+polling_sites = nyc_election_day.query()
+```
+
+Next, preparing the data for plotting by creating a `geopandas.GeoDataFrame`.
+
+```{python}
+polling_sites_gjson = polling_sites.to_geojson
+polling_sites_dict = json.loads(polling_sites_gjson)
+polling_sites_gdf = gpd.GeoDataFrame.from_features(polling_sites_dict['features'])
+polling_sites_gdf.head()
+```
+
+## Make a Map
+
+Lat and Long to point geometry. I couldn't ftell out what coordinate system the NYS data is using, so guessed `EPSG: 4326`. Converted so the data could plot over a map of the NYC boroughs.
+
+```{python}
+polling_gdf = gpd.GeoDataFrame(polling_sites_gdf, geometry = gpd.points_from_xy(polling_sites_gdf.NYS_Longitude, polling_sites_gdf.NYS_Latitude), crs="EPSG:4326")
+polling_gdf.head()
+# Convert coordinate system
+polling_gdf = polling_gdf.to_crs('EPSG:2263')
+```
+
+```{python}
+# Get borough boundaries
+path_to_data = get_path("nybb")
+nybb_dat = gpd.read_file(path_to_data)
+nybb_dat = nybb_dat.set_index("BoroName")
+nybb_dat["boundary"] = nybb_dat.boundary
+```
+
+```{python}
+# Draw the map
+ax = nybb_dat["boundary"].plot()
+ax.set_axis_off()
+polling_gdf["geometry"].plot(
+    figsize=(12, 12), dpi=72, ax=ax, color="black", markersize=1
+).set_title("NYC Election Day Polling Sites: 2025")
+```
