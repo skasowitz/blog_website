@@ -1,0 +1,281 @@
+---
+title: "30DayMapChallenge Days 02 & 03 - Lines & Polygons"
+description: ""
+date: "2025-11-03"
+image: featured.png
+image-alt: Map of the United States of America with flights connecting through JFK drawn as arcs.
+categories:
+  - 30DayMapChallenge
+  - Data visualization
+  - R
+  - ggplot2
+  - Geospatial
+toc: true
+number-sections: true
+citation: true
+format:
+  html:
+    code-fold: true
+    code-summary: "Show the code"
+execute:
+  echo: true
+  warning: false
+---
+
+Unable to get to a computer yesterday, this challenge is off to a rocky start. To help catch up I am cheating a bit, using a single data set to tackle days 2 (Lines) and 3 (Polygons) for the 30DayMapChallenge.
+
+Flight data from the (Bureau of Transportation Statistics)[https://www.bts.gov/].
+
+I am focusing on flights to and from JFK airport in New York.
+
+## Setup
+```{r}
+library(anyflights)
+library(tidyverse)
+library(geosphere)
+library(maps)
+library(ggrepel)
+```
+
+## Load Data
+```{r}
+flights <- read_csv(
+  'D:/Projects/FlightData/On_Time_Reporting_Carrier_On_Time_Performance_(1987_present)_2024_12.csv'
+)
+```
+
+::: {.callout-note collapse=true title="Peak at the full data set"}
+```{r}
+glimpse(flights)
+```
+:::
+
+```{r}
+airports <- get_airports(dir = tempdir()) |>
+  select(faa, name, lat, lon)
+
+glimpse(airports)
+```
+
+## Day 2 - Lines
+
+### Filter Data
+I am interested in inbound and outbound flights for JFK during holiday travel at the end of the year. 
+
+```{r}
+jfk_flights <- flights |>
+  filter(
+    between(FlightDate, ymd('2024-12-20'), ymd('2024-12-31')) &
+      (Origin == "JFK" | Dest == "JFK")
+  ) |>
+  select(
+    FlightDate,
+    Reporting_Airline,
+    Origin,
+    OriginCityName,
+    OriginState,
+    Dest,
+    DestCityName,
+    DestState
+  )
+
+glimpse(jfk_flights)
+```
+
+### Count routes and join on airport location data
+```{r}
+flight_counts <- jfk_flights |>
+  count(Origin, Dest) |>
+  left_join(airports |> select(-name), by = join_by('Origin' == 'faa')) |>
+  rename(origin_lat = lat, origin_lon = lon) |>
+  left_join(airports |> select(-name), by = join_by('Dest' == 'faa')) |>
+  rename(dest_lat = lat, dest_lon = lon)
+```
+
+### Slice most frequent routes for labels
+```{r}
+top_routes <- flight_counts |>
+  slice_max(order_by = n, n = 10) |>
+  distinct(Dest, .keep_all = TRUE)
+```
+
+### Clean up count data
+```{r}
+flight_counts <- flight_counts |>
+  filter(
+    !is.na(origin_lat),
+    !is.na(origin_lon),
+    !is.na(dest_lat),
+    !is.na(dest_lon)
+  ) |>
+  filter(!(origin_lat == dest_lat & origin_lon == dest_lon))
+
+arriving_counts <- flight_counts |>
+  filter(Dest == "JFK")
+departing_counts <- flight_counts |>
+  filter(Origin == "JFK")
+```
+
+### Calculate great circle arcs between airport locations
+```{r}
+great_circle_arcs <- flight_counts |>
+  # Add a unique identifier for each flight path
+  mutate(id = row_number()) %>%
+  # Ensure all numeric values are actually finite
+  filter_at(vars(origin_lat:dest_lon), all_vars(is.finite(.))) %>%
+  rowwise() %>%
+  do({
+    # Capture the current row's ID and count before calculating the arc
+    current_id <- .$id
+    current_n <- .$n
+
+    gc <- gcIntermediate(
+      c(.$origin_lon, .$origin_lat),
+      c(.$dest_lon, .$dest_lat),
+      n = 50,
+      addStartEnd = TRUE,
+      breakAtDateLine = TRUE
+    )
+
+    # Robustly handle matrix and vector outputs, and explicitly attach ID and N
+    if (is.matrix(gc)) {
+      as.data.frame(gc) %>%
+        rename(long = lon) %>%
+        # Explicitly attach the captured ID and N
+        mutate(id = current_id, n = current_n)
+    } else {
+      # Handle case where gc is a simple vector (start/end points only)
+      tibble(
+        long = c(.$origin_lon, .$dest_lon),
+        lat = c(.$origin_lat, .$dest_lat)
+      ) %>%
+        # Explicitly attach the captured ID and N
+        mutate(id = current_id, n = current_n)
+    }
+  }) %>%
+  ungroup()
+
+```
+
+### Prepare map data, focusing on continental US
+```{r}
+# Get world map data
+world_map <- map_data("world")
+
+# Filter the map to focus on the continental US (approximate boundaries)
+us_map <- world_map %>%
+  filter(region %in% c("USA", "Canada", "Mexico"))
+```
+
+### Create the map
+```{r}
+#| column: page-right
+#| label: jfk-connection-arcs
+#| fig-width: 12
+#| fig-height: 7
+
+ggplot() +
+  geom_polygon(
+    data = us_map,
+    aes(
+      x = long,
+      y = lat,
+      group = group
+    ),
+    fill = 'grey85',
+    color = 'grey55',
+    linewidth = 0.1
+  ) +
+  geom_path(
+    data = great_circle_arcs,
+    aes(x = long, y = lat, group = id, alpha = n, linewidth = n),
+    color = 'dodgerblue'
+  ) +
+  geom_point(
+    data = flight_counts,
+    aes(x = dest_lon, y = dest_lat),
+    color = "#D55E00",
+    size = 1.5
+  ) +
+  geom_point(
+    data = flight_counts,
+    aes(x = origin_lon, y = origin_lat),
+    color = "#009E73",
+    size = 1.5
+  ) +
+  geom_label_repel(
+    data = top_routes,
+    aes(x = dest_lon, y = dest_lat, label = Dest)
+  ) +
+  coord_sf(xlim = c(-125, -65), ylim = c(25, 50), expand = FALSE) +
+  labs(
+    title = "2024 End of Year Domestic Connections to JFK"
+  ) +
+  theme_minimal() +
+  theme(
+    legend.position = 'none',
+    plot.title = element_text(face = "bold"),
+    panel.grid.major = element_line(color = "grey95"),
+    panel.grid.minor = element_line(color = "grey95"),
+    axis.text = element_blank(), # Remove lat/long tick labels for a cleaner map
+    axis.title = element_blank() # Remove axis titles)
+  )
+```
+
+## Day 3 - Polygons
+
+Rather than looking at specific airports at the very end of the year, this simple choropleth presents where flights from JFK departed to in December of 2024.
+
+### Filter, Aggregate, and Join with map data
+```{r}
+
+states_counts <- flights |>
+  filter(
+    Year == 2024, Origin == "JFK"
+  ) |>
+  select(
+    FlightDate,
+    Reporting_Airline,
+    Origin,
+    OriginCityName,
+    OriginState,
+    Dest,
+    DestCityName,
+    DestState
+  ) |>
+    count(DestState)
+
+us_states <-
+    tibble(state_name = tolower(state.name), state_abb = state.abb)
+
+us_states_map <- map_data("state")
+
+jfk_departing_map_data <- us_states_map |>
+    rename(state_name = region) |>
+    left_join(us_states, by = "state_name") |>
+    left_join(states_counts, by = join_by("state_abb" == "DestState"))
+
+jfk_departing_map_data$n[is.na(jfk_departing_map_data$n)] <- 0
+```
+
+### Create the map
+```{r}
+#| column: page-right
+#| label: jfk-choropleth
+#| fig-width: 12
+#| fig-height: 7
+ggplot(jfk_departing_map_data,
+aes(x = long, y = lat, group = group, fill = n)) +
+    geom_polygon(color = 'white', linewidth = 0.1) +
+    scale_fill_gradientn(colors = RColorBrewer::brewer.pal(9, "YlGnBu"), 
+    name = "Flights from JFK") +
+    coord_map("bonne", lat0 = 45) +
+    labs(title = "December 2024 Flights From JFK by Destination State") +
+    theme_minimal() +
+    theme(
+    plot.title = element_text(face = "bold"),
+    axis.title = element_blank(),   
+    axis.text = element_blank(),     
+    panel.grid = element_blank()     
+  )
+```
