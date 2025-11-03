@@ -1,6 +1,6 @@
 ---
 title: "30DayMapChallenge Days 02 & 03 - Lines & Polygons"
-description: ""
+description: "Map exploration using JFK December 2024 flight data"
 date: "2025-11-03"
 image: featured.png
 image-alt: Map of the United States of America with flights connecting through JFK drawn as arcs.
