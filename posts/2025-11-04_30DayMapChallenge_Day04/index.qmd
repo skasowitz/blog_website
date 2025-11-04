@@ -1,0 +1,241 @@
+---
+title: "30DayMapChallenge Day 04 - BYOD"
+description: "Putter around with some Google Map data."
+date: "2025-11-04"
+image: featured.png
+image-alt: A street map focused on New York State with routes drawn in blue.
+categories:
+  - 30DayMapChallenge
+  - Data visualization
+  - Python
+  - Geospatial
+toc: true
+number-sections: true
+citation: true
+format:
+  html:
+    code-fold: true
+    code-summary: "Show the code"
+execute:
+  echo: false
+  warning: false
+jupyter: python3
+---
+
+Day 04 of the [#30DayMapChallenge](https://30daymapchallenge.com/) is bring your own data. I foolishly decided I'd look at some timeline data from Google Maps. The format of the exported data has evidently changed many times, and I had a lot of trouble finding a solid reference for what I actually downloaded from my own device.
+
+Several hours later...
+
+## Setup
+
+### Load modules
+```{python}
+#| echo: true
+import json
+import pandas as pd
+from datetime import datetime
+import folium
+```
+
+### Date range and data source (data not shared)
+```{python}
+#| eval: false
+#| echo: true
+
+
+# --- Configuration  ---
+JSON_FILE_PATH = "Timeline.json"
+START_DATE_STR = "2024-11-04"  # First date to include
+END_DATE_STR = "2024-11-08"  # Last date to include
+
+# Set the comparison strings (start of START_DATE to end of END_DATE)
+RANGE_START = START_DATE_STR + "T00:00:00"
+RANGE_END = END_DATE_STR + "T23:59:59"
+
+with open(JSON_FILE_PATH, "r", encoding="utf-8") as f:
+    data = json.load(f)
+
+all_points = []
+```
+
+### Location parsing function
+
+```{python}
+#| echo: true
+#| eval: false
+#| 
+def extract_and_clean_coords(coord_string):
+    """Parses and converts the '40.9602497°, -73.7345027°' string to a (lat, lng) tuple."""
+    try:
+        cleaned_str = coord_string.replace("°", "").replace(" ", "")
+        lat_str, lng_str = cleaned_str.split(",")
+        return float(lat_str), float(lng_str)
+    except:
+        return None, None
+```
+
+## Parse JSON file
+
+```{python}
+#| echo: true
+#| eval: false
+
+# --- Data Parsing Logic: Target FLAT semanticSegments Array ---
+print(f"Parsing flat 'semanticSegments' for path data on {TARGET_DATE_STR}...")
+
+segments = data.get("semanticSegments", [])
+
+for segment in segments:
+    # 1. Determine the time boundary for date filtering
+    # Use 'startTime' as the most reliable key to check if the segment is relevant
+    if "startTime" not in segment:
+        continue
+
+    start_time_str = segment["startTime"]
+
+    # Check if the segment starts on the target day
+    # If a segment spans midnight, the segment is only counted on the day it STARTS.
+    if start_time_str < RANGE_START or start_time_str > RANGE_END:
+        continue
+
+    # 2. Extract Points from 'timelinePath' (Travel Segments)
+    # The key 'timelinePath' contains the array of points directly.
+    if "timelinePath" in segment and isinstance(segment["timelinePath"], list):
+        # Iterate directly through the timelinePath array
+        for point_obj in segment["timelinePath"]:
+            if "point" in point_obj and "time" in point_obj:
+                lat, lng = extract_and_clean_coords(point_obj["point"])
+                if lat is not None:
+                    all_points.append(
+                        {
+                            "time_str": point_obj["time"],
+                            "latitude": lat,
+                            "longitude": lng,
+                        }
+                    )
+
+    # 3. Extract Points from 'visit' (Stationary Segments) 
+    elif (
+        "visit" in segment
+        and "topCandidate" in segment["visit"]
+        and "placeLocation" in segment["visit"]["topCandidate"]
+    ):
+        visit_loc = segment["visit"]["topCandidate"]["placeLocation"]
+        # Visit locations use the 'latLng' key for coordinates
+        if "latLng" in visit_loc:
+            # We use the segment's start time for this point since the visit duration may be hours
+            lat, lng = extract_and_clean_coords(visit_loc["latLng"])
+            if lat is not None:
+                all_points.append(
+                    {
+                        "time_str": start_time_str,  # Use segment start time as point time
+                        "latitude": lat,
+                        "longitude": lng,
+                    }
+                )
+```
+
+## Create a leaflet view with Folium
+
+```{python}
+# | echo: true
+# | eval: false
+
+
+if all_points:
+    # Convert to DataFrame, sort by time, and drop adjacent duplicate coordinates
+    df = (
+        pd.DataFrame(all_points)
+        .sort_values("time_str")
+        .drop_duplicates(subset=["latitude", "longitude"])
+    )
+    points = df[["latitude", "longitude"]].values.tolist()
+
+    # Ensure there's enough data to plot a path
+    if len(points) < 2:
+        print(f"Only {len(points)} unique coordinate found for plotting.")
+
+    # --- Folium Map Creation ---
+    center_lat = df["latitude"].mean()
+    center_lon = df["longitude"].mean()
+
+    m = folium.Map(
+        location=[center_lat, center_lon], zoom_start=12, tiles="OpenStreetMap"
+    )
+
+    folium.PolyLine(
+        points,
+        color="blue",
+        weight=5,
+        opacity=0.8,
+        popup=f"Timeline Path for {TARGET_DATE_STR}",
+    ).add_to(m)
+
+    if len(points) > 1:
+        folium.Marker(
+            points[0],
+            popup=f"**Start** ({df.iloc[0]['time_str'][11:16]})",
+            icon=folium.Icon(color="green", icon="play"),
+        ).add_to(m)
+        folium.Marker(
+            points[-1],
+            popup=f"**End** ({df.iloc[-1]['time_str'][11:16]})",
+            icon=folium.Icon(color="red", icon="stop"),
+        ).add_to(m)
+
+    # Render the map
+    m
+else:
+    print(
+        f"No travel path data found for {TARGET_DATE_STR}. Please verify the target date and JSON file integrity."
+    )
+```
+
+
+
+```{python}
+#| column: page-inset
+#| label: fig-timeline-map-working
+#| fig-cap: "Interactive map showing travel path extracted from the final verified schema."
+#| echo: false
+
+
+df = pd.read_csv(
+    "D:\\Blog\\blog_website\\posts\\2025-11-04_30DayMapChallenge_Day04\\sample_points.csv"
+)
+
+points = df[["latitude", "longitude"]].values.tolist()
+
+# Ensure there's enough data to plot a path
+if len(points) < 2:
+    print(f"Only {len(points)} unique coordinate found for plotting.")
+
+# --- Folium Map Creation ---
+center_lat = df["latitude"].mean()
+center_lon = df["longitude"].mean()
+
+m = folium.Map(location=[center_lat, center_lon], zoom_start=12, tiles="OpenStreetMap")
+
+folium.PolyLine(
+    points,
+    color="blue",
+    weight=5,
+    opacity=0.8,
+    popup=f"Timeline Path for November 2024",
+).add_to(m)
+
+if len(points) > 1:
+    folium.Marker(
+        points[0],
+        popup=f"**Start** ({df.iloc[0]['time_str'][11:16]})",
+        icon=folium.Icon(color="green", icon="play"),
+    ).add_to(m)
+    folium.Marker(
+        points[-1],
+        popup=f"**End** ({df.iloc[-1]['time_str'][11:16]})",
+        icon=folium.Icon(color="red", icon="stop"),
+    ).add_to(m)
+
+# Render the map
+m
+```

@@ -2,3 +2,7 @@
 **/*.quarto_ipynb
 /_site/
 /.luarc.json
+posts/2025-11-04_30DayMapChallenge_Day04/Timeline.json
+posts/2025-11-04_30DayMapChallenge_Day04/timeline.csv
+posts/2025-11-04_30DayMapChallenge_Day04/schema_extractor.py
+Timeline.json
