@@ -44,7 +44,7 @@ flights <- read_csv(
 )
 ```
 
-::: {.callout-note collapse=true title="Peak at the full data set"}
+::: {.callout-note collapse=true title="Peek at the full data set"}
 ```{r}
 glimpse(flights)
 ```
