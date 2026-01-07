@@ -1,0 +1,126 @@
+---
+title: "TidyTuesday 2026 - Week 1"
+description: "Quick exploration and visualization of reservoirs in the New York City water system"
+date: "2026-01-07"
+image: featured.png
+image-alt: Yearly storage patterns at NYC reservoirs between 2017 and early autumn 2025.
+categories:
+  - TidyTuesday
+  - Data visualization
+  - R
+  - ggplot2
+toc: true
+number-sections: true
+citation: true
+format:
+  html:
+    code-fold: true
+    code-summary: "Show the code"
+execute:
+  echo: true
+  warning: false
+---
+
+The first TidyTuesday of 2026 starts off with a "Bring Your Own Data" week. I grabbed [reservoir level data]('https://data.cityofnewyork.us/Environment/Current-Reservoir-Levels/') for the City of New York.
+
+## Load data
+```{r}
+library(tidyverse)
+
+nyc_reservoirs <- read_csv(
+  'Current_Reservoir_Levels.csv'
+)
+glimpse(nyc_reservoirs)
+```
+
+The data set contains daily measurements for nearly 8 years. There are three types of values:
+- Storage Volume in billions of gallons (BG)
+- Elevation in feet
+- Release in millions of gallons per day (MGD)
+
+## Wrangle for plotting
+```{r}
+df <- nyc_reservoirs |>
+  mutate(date = mdy(Point_time)) |>
+  rename(
+    "Ashokan East Storage" = AUGEVolume,
+    "Ashokan East Elevation" = AUGEASTLEVANALOG,
+    "Ashokan West Elevation" = AUGWVOLUME,
+    "Ashokan West Storage" = AUGWESTLEVANALOG,
+    "Ashokan Release" = ASHREL,
+    "Schoharie Storage" = SICRESVOLUME,
+    "Schoharie Elevation" = SICRESELEVANALOG,
+    "Schoharie Release" = STPALBFLW,
+    "Rondout Storage" = RECRESVOLUME,
+    "Rondout Elevation" = RECRESELEVANALOG,
+    "Rondout Release" = RECREL,
+    "Neversink Storage" = NICRESVOLUME,
+    "Neversink Elevation" = NICRESELEVANALOG,
+    "Neversink North Flow Release" = NICNTHFLW,
+    "Neversink South Flow Release" = NICSTHFLW,
+    "Neversink Conservation Flow Release" = NICCONFLW,
+    "Pepacton Storage" = EDIRESVOLUME,
+    "Pepacton Elevation" = EDIRESELEVANALOG,
+    "Pepacton North Flow Release" = EDRNTHFLW,
+    "Pepacton South Flow Release" = EDRSTHFLW,
+    "Pepacton Conservation Flow Release" = EDRCONFLW,
+    "Cannonsville Storage" = WDIRESVOLUME,
+    "Cannonsville Elevation" = WDIRESELEVANALOG,
+    "Cannonsville Release" = WDRFLW
+  ) |>
+  pivot_longer(
+    -c(Point_time, date),
+    names_to = 'reservoir',
+    values_to = 'values'
+  ) |>
+  extract(
+    reservoir,
+    into = c('reservoir', 'type'),
+    regex = '^(.+)\\s+(.+?)$'
+  )
+
+```
+
+### Create a data frame with storage data for a seasonal plot
+```{r}
+storage_data <- df |>
+  filter(type == "Storage") |>
+  mutate(year = year(date),
+         month = month(date, label = TRUE))
+```
+
+## Plotting
+
+### Data quality check
+
+```{r}
+ggplot(storage_data, aes(x = reorder(reservoir, values, median), y = values, fill = reservoir)) +
+  geom_boxplot(outlier.color = "red", outlier.size = 1.5) +
+  coord_flip() +
+  labs(title = "Distribution of Water Storage by Reservoir",
+       subtitle = "Red points indicate statistical outliers",
+       x = "Reservoir",
+       y = "Storage (Billions of Gallons)") +
+  theme_minimal() +
+  theme(legend.position = "none",
+        plot.title = element_text(face = "bold", size = 14)) +
+  scale_fill_brewer(palette = "Set2")
+```
+Suspicious 2024 data. Further investigation would be needed to work out if something was off with measurements or if this reflects genuinely dramatic changes in storage.
+
+```{r}
+ggplot(storage_data |> filter(reservoir != "Rondout" | values < 60), 
+       aes(x = month, y = values, group = factor(year), color = factor(year))) +
+  geom_line(alpha = 0.5, linewidth = 1.5) +
+  facet_wrap(~reservoir, scales = "free_y", ncol = 2) +
+  labs(title = "Seasonal Storage Patterns by Year",
+       subtitle = "Each line represents one year (Rondout outliers removed)",
+       group = "Year", color = "Year",
+       x = "Month",
+       y = "Storage (Billions of Gallons)") +
+  theme_minimal() +
+  theme(plot.title = element_text(face = "bold", size = 14),
+        strip.text = element_text(face = "bold"),
+        axis.text.x = element_text(angle = 45, hjust = 1)) +
+  scale_color_viridis_d()
+```
