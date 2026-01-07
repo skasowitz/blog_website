@@ -24,6 +24,7 @@ execute:
 The first TidyTuesday of 2026 starts off with a "Bring Your Own Data" week. I grabbed [reservoir level data]('https://data.cityofnewyork.us/Environment/Current-Reservoir-Levels/') for the City of New York.
 
 ## Load data
+
 ```{r}
 library(tidyverse)
 
@@ -33,12 +34,18 @@ nyc_reservoirs <- read_csv(
 glimpse(nyc_reservoirs)
 ```
 
-The data set contains daily measurements for nearly 8 years. There are three types of values:
-- Storage Volume in billions of gallons (BG)
-- Elevation in feet
-- Release in millions of gallons per day (MGD)
+The data set contains daily measurements for nearly 8 years.
 
-## Wrangle for plotting
+There are three types of values:
+
+-   Storage Volume in billions of gallons (BG)
+
+-   Elevation in feet
+
+-   Release in millions of gallons per day (MGD)
+
+    ## Wrangle for plotting
+
 ```{r}
 df <- nyc_reservoirs |>
   mutate(date = mdy(Point_time)) |>
@@ -82,6 +89,7 @@ df <- nyc_reservoirs |>
 ```
 
 ### Create a data frame with storage data for a seasonal plot
+
 ```{r}
 storage_data <- df |>
   filter(type == "Storage") |>
@@ -106,6 +114,7 @@ ggplot(storage_data, aes(x = reorder(reservoir, values, median), y = values, fil
         plot.title = element_text(face = "bold", size = 14)) +
   scale_fill_brewer(palette = "Set2")
 ```
+
 Suspicious 2024 data. Further investigation would be needed to work out if something was off with measurements or if this reflects genuinely dramatic changes in storage.
 
 ```{r}
