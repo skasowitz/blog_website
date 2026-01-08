@@ -13,3 +13,16 @@ citation: true
 format:
   html:
     pagetitle: "Data Tales | {{< meta title >}}"
+
+comments:
+  giscus:
+    repo: skasowitz/sk-blog-comments
+    repo-id: "R_kgDOQ2Gwgw"
+    category: Announcements
+    category-id: "DIC_kwDOQ2Gwg84C0uWX"
+    mapping: pathname
+    reactions-enabled: true
+    input-position: top
+    loading: lazy
+    theme: light
+    language: en
