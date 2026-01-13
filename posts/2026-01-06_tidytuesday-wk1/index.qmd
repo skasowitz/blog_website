@@ -93,8 +93,7 @@ df <- nyc_reservoirs |>
 ```{r}
 storage_data <- df |>
   filter(type == "Storage") |>
-  mutate(year = year(date),
-         month = month(date, label = TRUE))
+  mutate(year = year(date), month = month(date, label = TRUE))
 ```
 
 ## Plotting
@@ -102,34 +101,48 @@ storage_data <- df |>
 ### Data quality check
 
 ```{r}
-ggplot(storage_data, aes(x = reorder(reservoir, values, median), y = values, fill = reservoir)) +
+ggplot(
+  storage_data,
+  aes(x = reorder(reservoir, values, median), y = values, fill = reservoir)
+) +
   geom_boxplot(outlier.color = "red", outlier.size = 1.5) +
   coord_flip() +
-  labs(title = "Distribution of Water Storage by Reservoir",
-       subtitle = "Red points indicate statistical outliers",
-       x = "Reservoir",
-       y = "Storage (Billions of Gallons)") +
+  labs(
+    title = "Distribution of Water Storage by Reservoir",
+    subtitle = "Red points indicate statistical outliers",
+    x = "Reservoir",
+    y = "Storage (Billions of Gallons)"
+  ) +
   theme_minimal() +
-  theme(legend.position = "none",
-        plot.title = element_text(face = "bold", size = 14)) +
+  theme(
+    legend.position = "none",
+    plot.title = element_text(face = "bold", size = 14)
+  ) +
   scale_fill_brewer(palette = "Set2")
 ```
 
 Suspicious 2024 data. Further investigation would be needed to work out if something was off with measurements or if this reflects genuinely dramatic changes in storage.
 
 ```{r}
-ggplot(storage_data |> filter(reservoir != "Rondout" | values < 60), 
-       aes(x = month, y = values, group = factor(year), color = factor(year))) +
+ggplot(
+  storage_data |> filter(reservoir != "Rondout" | values < 60),
+  aes(x = month, y = values, group = factor(year), color = factor(year))
+) +
   geom_line(alpha = 0.5, linewidth = 1.5) +
   facet_wrap(~reservoir, scales = "free_y", ncol = 2) +
-  labs(title = "Seasonal Storage Patterns by Year",
-       subtitle = "Each line represents one year (Rondout outliers removed)",
-       group = "Year", color = "Year",
-       x = "Month",
-       y = "Storage (Billions of Gallons)") +
+  labs(
+    title = "Seasonal Storage Patterns by Year",
+    subtitle = "Each line represents one year (Rondout outliers removed)",
+    group = "Year",
+    color = "Year",
+    x = "Month",
+    y = "Storage (Billions of Gallons)"
+  ) +
   theme_minimal() +
-  theme(plot.title = element_text(face = "bold", size = 14),
-        strip.text = element_text(face = "bold"),
-        axis.text.x = element_text(angle = 45, hjust = 1)) +
+  theme(
+    plot.title = element_text(face = "bold", size = 14),
+    strip.text = element_text(face = "bold"),
+    axis.text.x = element_text(angle = 45, hjust = 1)
+  ) +
   scale_color_viridis_d()
 ```

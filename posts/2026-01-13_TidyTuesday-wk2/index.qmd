@@ -1,0 +1,261 @@
+---
+title: "TidyTuesday 2026 - Week 2"
+description: "Visualisation of TidyTuesday data set: Languages of Africa"
+date: "2026-01-13"
+image: featured.png
+image-alt: Map of Africa highlighting languages unique to individual countries
+categories:
+  - TidyTuesday
+  - Data visualization
+  - R
+  - ggplot2
+  - Geospatial
+toc: true
+number-sections: true
+citation: true
+format:
+  html:
+    code-fold: true
+    code-summary: "Show the code"
+execute:
+  echo: true
+  warning: false
+---
+
+## Setup
+
+```{r setup}
+library(tidyverse)
+library(ggtext)
+library(showtext)
+library(ggrepel)
+library(rnaturalearth)
+library(sf)
+
+
+font_add(
+  'fa7-brands',
+  here::here('fonts/Font Awesome 7 Brands-Regular-400.otf')
+)
+font_add_google('Syne Mono', 'syne')
+showtext_auto(enable = TRUE)
+```
+
+## Load the data
+
+```{r load_data}
+tuesdata <- tidytuesdayR::tt_load(2026, week = 2)
+africa_lang <- tuesdata$africa |> distinct()
+```
+
+## Explore
+
+```{r explore}
+africa_lang |> glimpse()
+
+africa_lang |>
+  summarize(speakers = sum(native_speakers), .by = 'family')
+
+africa_lang |>
+  count(country) |>
+  arrange(n)
+
+africa_lang |>
+  filter(country == 'Ethiopia')
+
+lang_count <- africa_lang |> distinct(language) |> nrow()
+```
+
+### One Country Languages
+
+```{r single_country_count}
+one_country_lang <- africa_lang |>
+  add_count(language, name = 'country_count') |>
+  filter(country_count == 1) |>
+  arrange(desc(native_speakers))
+
+lang_perc <- scales::percent(nrow(one_country_lang) / lang_count)
+```
+
+Some `{r} lang_perc` of the languages from Wikipedia's table are spoken in a single country.
+
+```{r}
+#| column: margin
+#| label: fig-most-languages
+#| fig-cap: "Five countries with the most languages spoken no where else"
+#| echo: false
+one_country_lang |>
+  count(country, name = 'languages') |>
+  slice_max(languages, n = 5) |>
+  arrange(desc(languages)) |>
+  gt::gt()
+```
+
+
+## Quick Plot 1
+
+```{r}
+#| label: fig-unique-language-trend
+#| fig-cap: "Counts of languages by country in Africa compared with number of languages spoken exclusively in that country"
+one_country_lang |>
+  select(language, country) |>
+  add_count(country, name = 'unique_languages') |>
+  select(-language) |>
+  distinct() |>
+  left_join(africa_lang |> count(country, name = 'languages')) |>
+  arrange(country) |>
+  ggplot(aes(x = languages, y = unique_languages)) +
+  geom_point() +
+  geom_text_repel(aes(label = country), max.overlaps = 20) +
+  geom_smooth(method = 'loess')
+
+```
+
+## Adding population data
+
+Pulling in a different Wikipedia table with country population data reveals some unsurprising oddities. Comparing the numbers of native speakers to the country level populations for languages which are only spoken in a single country finds a few languages spoken by more people than the listed population size. 
+
+```{r join-pop-data}
+pop_data <- rvest::read_html(
+  'https://en.wikipedia.org/wiki/List_of_African_countries_by_population'
+) |>
+  rvest::html_table() |>
+  purrr::pluck(1) |>
+  select(country = Country, population = 'Population[1]') |>
+  mutate(population = as.numeric(gsub(',', '', population)))
+
+glimpse(pop_data)
+
+lang_data <- one_country_lang |>
+  mutate(country = str_replace(country, 'Congo', 'DR Congo')) |>
+  left_join(pop_data) |>
+  mutate(pop_prop = round(native_speakers / population, 1))
+
+lang_data |>
+  arrange(desc(pop_prop)) |>
+  select(-family, -country_count) |>
+  filter(pop_prop >= 1) |>
+  mutate(Population_Prop = scales::percent(pop_prop)) |>
+  select(-pop_prop) |>
+  gt::gt()
+
+top_unique_lang <- lang_data |>
+  select(language, country, pop_prop) |>
+  slice_max(order_by = pop_prop, by = country, n = 1, with_ties = FALSE)
+```
+
+## Quick Plot 2
+
+
+```{r map-data}
+africa_map <- ne_countries(
+  continent = "Africa",
+  scale = "medium"
+) |>
+  select(name_en, geometry) |>
+  mutate(
+    name_en = case_when(
+      name_en == "The Gambia" ~ "Gambia",
+      name_en == "Democratic Republic of the Congo" ~ "DR Congo",
+      TRUE ~ name_en
+    )
+  )
+
+map_data <-
+  africa_map |>
+  left_join(top_unique_lang, by = c('name_en' = 'country')) |>
+  mutate(
+    language = if_else(is.na(language), '', language),
+    pop_prop = if_else(pop_prop >= 1, 1, pop_prop)
+  )
+
+map_labels <-
+  map_data |>
+  st_centroid() |>
+  st_coordinates() |>
+  as_tibble() |>
+  bind_cols(
+    map_data |> st_drop_geometry()
+  )
+```
+
+
+```{r}
+#| label: fig-quick-map
+af_lang_map <- ggplot() +
+  geom_sf(
+    data = map_data,
+    aes(fill = pop_prop),
+    color = 'grey70',
+    linewidth = 0.1
+  ) +
+  scale_fill_viridis_c(option = 'C', na.value = 'gray50', alpha = 0.8) +
+  geom_text_repel(
+    data = map_labels,
+    aes(x = X, y = Y, label = language),
+    seed = 42
+  ) +
+  labs(fill = 'Population\nProportion')
+
+af_lang_map
+```
+
+## Final Map
+
+
+```{r params}
+set_theme(theme_void(paper = '#d4e4f0', ink = '#333333'))
+title_text <- str_glue('Most Widely Spoken Languages')
+subtitle_text <- str_glue('(Which are only spoken in a single country)')
+
+linkedin = str_glue("<span style='font-family:fa7-brands'>&#xf08c;</span>")
+github = str_glue("<span style='font-family:fa7-brands'>&#xf09b;</span>")
+bluesky = str_glue("<span style='font-family:fa7-brands'>&#xe671;</span>")
+
+socials <- str_glue(
+  "{linkedin}   sethkasowitz   &bull;   {bluesky}   skasowitz &bull;   {github}   skasowitz"
+)
+
+tidytuesday_desc <- str_glue(
+  "#TidyTuesday:   2026   Week   2  |  Source:   Wikipedia   'Languages   of   Africa'<br>"
+)
+
+full_caption <- str_glue("{tidytuesday_desc} {socials}")
+```
+
+
+```{r}
+#| label: fig-final-map-plot
+#| fig-width: 10
+#| fig-height: 10
+
+af_lang_map +
+  labs(
+    title = title_text,
+    subtitle = subtitle_text,
+    caption = socials,
+    x = '',
+    y = ''
+  ) +
+  theme(
+    plot.title = element_text(
+      size = rel(1.4),
+      face = "bold",
+      family = 'syne'
+    ),
+    plot.subtitle = element_text(
+      family = 'syne'
+    ),
+    plot.caption = element_markdown(
+      family = 'syne',
+      size = rel(1),
+      hjust = 0,
+      padding = margin(b = 6)
+    ),
+    legend.title = element_text(
+      hjust = 1
+    ),
+    legend.position = 'inside',
+    legend.position.inside = c(0.2, 0.3)
+  )
+```
