@@ -226,8 +226,9 @@ full_caption <- str_glue("{tidytuesday_desc} {socials}")
 
 ```{r}
 #| label: fig-final-map-plot
-#| fig-width: 10
-#| fig-height: 10
+#| fig-width: 12
+#| fig-height: 12
+#| column: page
 
 af_lang_map +
   labs(
