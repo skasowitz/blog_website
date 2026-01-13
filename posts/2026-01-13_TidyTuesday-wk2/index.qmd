@@ -165,18 +165,20 @@ map_data <-
   africa_map |>
   left_join(top_unique_lang, by = c('name_en' = 'country')) |>
   mutate(
+    label = if_else(is.na(language), '', str_glue("{language}\n({name_en})")),
     language = if_else(is.na(language), '', language),
     pop_prop = if_else(pop_prop >= 1, 1, pop_prop)
   )
 
-map_labels <-
-  map_data |>
+
+map_labels <- map_data |>
   st_centroid() |>
   st_coordinates() |>
   as_tibble() |>
   bind_cols(
     map_data |> st_drop_geometry()
-  )
+  ) |>
+  mutate()
 ```
 
 
@@ -190,12 +192,14 @@ af_lang_map <- ggplot() +
     linewidth = 0.1
   ) +
   scale_fill_viridis_c(option = 'C', na.value = 'gray50', alpha = 0.8) +
+  labs(fill = 'Population\nProportion') +
   geom_text_repel(
     data = map_labels,
-    aes(x = X, y = Y, label = language),
-    seed = 42
-  ) +
-  labs(fill = 'Population\nProportion')
+    aes(x = X, y = Y, label = label),
+    seed = 42,
+    min.segment.length = 0,
+    max.overlaps = 16
+  )
 
 af_lang_map
 ```
@@ -226,9 +230,9 @@ full_caption <- str_glue("{tidytuesday_desc} {socials}")
 
 ```{r}
 #| label: fig-final-map-plot
-#| fig-width: 12
-#| fig-height: 12
-#| column: page
+#| fig-width: 16
+#| fig-height: 16
+#| column: screen
 
 af_lang_map +
   labs(
@@ -245,11 +249,12 @@ af_lang_map +
       family = 'syne'
     ),
     plot.subtitle = element_text(
-      family = 'syne'
+      family = 'syne',
+      size = rel(1.2)
     ),
     plot.caption = element_markdown(
       family = 'syne',
-      size = rel(1),
+      size = rel(1.2),
       hjust = 0,
       padding = margin(b = 6)
     ),
